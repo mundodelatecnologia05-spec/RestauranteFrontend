@@ -1,0 +1,266 @@
+/* =============================================
+   EditUser.css — Desktop-first, fondo blanco
+   ============================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ── Página ── */
+.eu-page {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+/* ── Tarjeta central ── */
+.eu-container {
+  width: 100%;
+  max-width: 580px;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.10);
+}
+
+/* ── Header ── */
+.eu-header {
+  background-color: #1e3a5f;
+  padding: 13px 22px;
+}
+
+.eu-header-text {
+  color: #ccd9ea;
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Banner ── */
+.eu-banner {
+  width: 100%;
+  height: 230px;
+  overflow: hidden;
+}
+
+.eu-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.eu-banner-img:hover {
+  transform: scale(1.03);
+}
+
+/* ── Form card ── */
+.eu-card {
+  background: #ffffff;
+  padding: 38px 44px 48px;
+}
+
+/* ── Título ── */
+.eu-title {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #111111;
+  text-align: center;
+  padding-bottom: 14px;
+  margin-bottom: 4px;
+  border-bottom: 2.5px solid #1e6fbf;
+  letter-spacing: -0.01em;
+}
+
+/* ── Alerta de éxito ── */
+.eu-alert {
+  margin-top: 18px;
+  padding: 10px 16px;
+  background-color: #eafaf1;
+  border: 1px solid #3aaf6a;
+  border-radius: 6px;
+  color: #1e7e44;
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ── Campos ── */
+.eu-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 26px;
+}
+
+.eu-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eu-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #333333;
+}
+
+.eu-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 0.93rem;
+  color: #222;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.eu-input::placeholder {
+  color: #b5b5b5;
+}
+
+.eu-input:focus {
+  border-color: #1e6fbf;
+  box-shadow: 0 0 0 3px rgba(30, 111, 191, 0.12);
+}
+
+/* ── Select ── */
+.eu-select-wrapper {
+  position: relative;
+}
+
+.eu-select {
+  width: 100%;
+  padding: 11px 38px 11px 14px;
+  border: 1.5px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 0.93rem;
+  color: #222;
+  background: #ffffff;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.eu-select:focus {
+  border-color: #1e6fbf;
+  box-shadow: 0 0 0 3px rgba(30, 111, 191, 0.12);
+}
+
+.eu-select option {
+  color: #222;
+}
+
+.eu-select-arrow {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.62rem;
+  color: #666;
+  pointer-events: none;
+}
+
+/* ── Botones ── */
+.eu-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 34px;
+}
+
+.eu-btn {
+  flex: 1;
+  padding: 13px 0;
+  border: none;
+  border-radius: 7px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: opacity 0.18s, transform 0.12s, box-shadow 0.18s;
+}
+
+.eu-btn:hover {
+  opacity: 0.88;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.eu-btn:active {
+  transform: scale(0.97);
+}
+
+.eu-btn--guardar {
+  background-color: #1e6fbf;
+  color: #ffffff;
+}
+
+.eu-btn--cancelar {
+  background-color: #e84e4e;
+  color: #ffffff;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 640px) {
+  .eu-page {
+    padding: 20px 12px 40px;
+    align-items: flex-start;
+  }
+
+  .eu-container {
+    border-radius: 10px;
+  }
+
+  .eu-banner {
+    height: 190px;
+  }
+
+  .eu-card {
+    padding: 28px 24px 36px;
+  }
+
+  .eu-title {
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .eu-page {
+    padding: 0;
+    background-color: #ffffff;
+  }
+
+  .eu-container {
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 100vh;
+  }
+
+  .eu-banner {
+    height: 170px;
+  }
+
+  .eu-card {
+    padding: 24px 18px 32px;
+  }
+}
