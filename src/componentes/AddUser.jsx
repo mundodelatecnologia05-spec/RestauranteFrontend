@@ -23,27 +23,80 @@ export default function AddUser() {
     console.log("Usuario añadido:", form);
   };
 
-  const handleCancel = () => {
-    navigate("/users");
-  };
-
   return (
-    <div className="au-page">
-      <div className="au-container">
+    <div className="au-layout">
 
-
-        {/* Banner */}
-        <div className="au-banner">
+      {/* ── Sidebar ── */}
+      <aside className="au-sidebar">
+        <div className="au-sidebar-hero">
           <img
             src={prueba}
-            alt="Restaurant banner"
-            className="au-banner-img"
+            alt="Restaurant"
+            className="au-sidebar-hero-img"
           />
+          <div className="au-sidebar-hero-overlay">
+            <p className="au-brand">La Mesa Dorada</p>
+            <p className="au-brand-sub">Panel de gestión</p>
+            <div className="au-gold-line" />
+          </div>
         </div>
 
-        {/* Form */}
-        <div className="au-card">
-          <h2 className="au-title">Añadir Usuario</h2>
+        <div className="au-sidebar-profile">
+          <div className="au-avatar-big">
+            {form.nombre
+              ? form.nombre.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()
+              : "👤"}
+          </div>
+          <p className="au-profile-name">
+            {form.nombre || "Nuevo miembro"}
+          </p>
+          <p className="au-profile-hint">
+            {form.nombre
+              ? "Revisá los datos antes de guardar"
+              : "Completa el formulario\npara registrar al usuario"}
+          </p>
+        </div>
+
+        <div className="au-sidebar-info">
+          <div className="au-info-row">
+            <span className="au-info-label">Nombre</span>
+            <span className={`au-info-value ${!form.nombre ? "au-info-value--empty" : ""}`}>
+              {form.nombre || "—"}
+            </span>
+          </div>
+          <div className="au-info-row">
+            <span className="au-info-label">Cargo</span>
+            <span className={`au-info-value ${!form.cargo ? "au-info-value--empty" : ""}`}>
+              {form.cargo || "—"}
+            </span>
+          </div>
+          <div className="au-info-row">
+            <span className="au-info-label">Estado</span>
+            <span className="au-info-value au-info-value--pending">● Pendiente</span>
+          </div>
+        </div>
+
+        <div className="au-sidebar-footer">
+          <button className="au-back-btn" onClick={() => navigate("/users")}>
+            ← Volver a usuarios
+          </button>
+        </div>
+      </aside>
+
+      {/* ── Main ── */}
+      <main className="au-main">
+        <div className="au-topbar">
+          <div>
+            <p className="au-topbar-title">Añadir Usuario</p>
+            <p className="au-topbar-sub">Registrar nuevo miembro del personal</p>
+          </div>
+          <span className="au-status-pill">+ Nuevo registro</span>
+        </div>
+
+        <div className="au-divider" />
+
+        <div className="au-content">
+          <p className="au-section-label">Información personal</p>
 
           <div className="au-fields">
             <div className="au-field">
@@ -59,33 +112,15 @@ export default function AddUser() {
             </div>
 
             <div className="au-field">
-              <label className="au-label">Correo</label>
+              <label className="au-label">Correo electrónico</label>
               <input
                 className="au-input"
                 type="email"
                 name="correo"
-                placeholder="Juanlito@gmail.com"
+                placeholder="juanlito@gmail.com"
                 value={form.correo}
                 onChange={handleChange}
               />
-            </div>
-
-            <div className="au-field">
-              <label className="au-label">Cargo</label>
-              <div className="au-select-wrapper">
-                <select
-                  className="au-select"
-                  name="cargo"
-                  value={form.cargo}
-                  onChange={handleChange}
-                >
-                  <option value="" disabled hidden>Mesero</option>
-                  {CARGOS.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-                <span className="au-select-arrow">▼</span>
-              </div>
             </div>
 
             <div className="au-field">
@@ -99,15 +134,37 @@ export default function AddUser() {
                 onChange={handleChange}
               />
             </div>
+
+            <div className="au-field">
+              <label className="au-label">Cargo</label>
+              <div className="au-select-wrapper">
+                <select
+                  className="au-select"
+                  name="cargo"
+                  value={form.cargo}
+                  onChange={handleChange}
+                >
+                  <option value="" disabled hidden>Seleccionar cargo</option>
+                  {CARGOS.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+                <span className="au-select-arrow">▼</span>
+              </div>
+            </div>
           </div>
 
           <div className="au-actions">
-            <button className="au-btn au-btn--add" onClick={handleAdd}>Añadir</button>
-            <button className="au-btn au-btn--cancel" onClick={handleCancel}>Cancelar</button>
+            <button className="au-btn au-btn--cancel" onClick={() => navigate("/users")}>
+              Cancelar
+            </button>
+            <button className="au-btn au-btn--add" onClick={handleAdd}>
+              Añadir usuario
+            </button>
           </div>
         </div>
+      </main>
 
-      </div>
     </div>
   );
 }

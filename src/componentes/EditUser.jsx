@@ -5,7 +5,6 @@ import prueba from "../assets/prueba.jpg";
 
 const CARGOS = ["Mesero", "Chef", "Cajero", "Administrador", "Bartender"];
 
-// Datos de ejemplo — reemplaza con los datos reales del usuario a editar
 const USUARIO_INICIAL = {
   nombre: "Juan Montoya",
   correo: "jmontoya@gmail.com",
@@ -28,32 +27,77 @@ export default function EditUser() {
     setGuardado(true);
   };
 
-  const handleCancel = () => {
-    navigate("/users");
-  };
+  const initiales = form.nombre
+    .split(" ")
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 
   return (
-    <div className="eu-page">
-      <div className="eu-container">
+    <div className="eu-layout">
 
-        {/* Banner */}
-        <div className="eu-banner">
+      {/* ── Sidebar ── */}
+      <aside className="eu-sidebar">
+        <div className="eu-sidebar-hero">
           <img
             src={prueba}
-            alt="Restaurant banner"
-            className="eu-banner-img"
+            alt="Restaurant"
+            className="eu-sidebar-hero-img"
           />
+          <div className="eu-sidebar-hero-overlay">
+            <p className="eu-brand">La Mesa Dorada</p>
+            <p className="eu-brand-sub">Panel de gestión</p>
+            <div className="eu-gold-line" />
+          </div>
         </div>
 
-        {/* Form */}
-        <div className="eu-card">
-          <h2 className="eu-title">Editar Usuario</h2>
+        <div className="eu-sidebar-profile">
+          <div className="eu-avatar-big">{initiales}</div>
+          <p className="eu-profile-name">{form.nombre}</p>
+          <span className="eu-profile-badge">{form.cargo}</span>
+        </div>
 
+        <div className="eu-sidebar-info">
+          <div className="eu-info-row">
+            <span className="eu-info-label">Usuario</span>
+            <span className="eu-info-value">{form.usuario}</span>
+          </div>
+          <div className="eu-info-row">
+            <span className="eu-info-label">Estado</span>
+            <span className="eu-info-value eu-info-value--active">● Activo</span>
+          </div>
+          <div className="eu-info-row">
+            <span className="eu-info-label">Correo</span>
+            <span className="eu-info-value eu-info-value--muted">{form.correo}</span>
+          </div>
+        </div>
+
+        <div className="eu-sidebar-footer">
+          <button className="eu-back-btn" onClick={() => navigate("/users")}>
+            ← Volver a usuarios
+          </button>
+        </div>
+      </aside>
+
+      {/* ── Main ── */}
+      <main className="eu-main">
+        <div className="eu-topbar">
+          <div>
+            <p className="eu-topbar-title">Editar Usuario</p>
+            <p className="eu-topbar-sub">Modificar información del personal</p>
+          </div>
+          <span className="eu-status-pill">● Editando</span>
+        </div>
+
+        <div className="eu-divider" />
+
+        <div className="eu-content">
           {guardado && (
-            <div className="eu-alert">
-              ✅ Usuario actualizado correctamente
-            </div>
+            <div className="eu-alert">✅ Usuario actualizado correctamente</div>
           )}
+
+          <p className="eu-section-label">Información personal</p>
 
           <div className="eu-fields">
             <div className="eu-field">
@@ -62,21 +106,33 @@ export default function EditUser() {
                 className="eu-input"
                 type="text"
                 name="nombre"
-                placeholder="Juanlito"
                 value={form.nombre}
                 onChange={handleChange}
+                placeholder="Nombre completo"
               />
             </div>
 
             <div className="eu-field">
-              <label className="eu-label">Correo</label>
+              <label className="eu-label">Correo electrónico</label>
               <input
                 className="eu-input"
                 type="email"
                 name="correo"
-                placeholder="Juanlito@gmail.com"
                 value={form.correo}
                 onChange={handleChange}
+                placeholder="correo@ejemplo.com"
+              />
+            </div>
+
+            <div className="eu-field">
+              <label className="eu-label">Usuario</label>
+              <input
+                className="eu-input"
+                type="text"
+                name="usuario"
+                value={form.usuario}
+                onChange={handleChange}
+                placeholder="nombre de usuario"
               />
             </div>
 
@@ -97,31 +153,19 @@ export default function EditUser() {
                 <span className="eu-select-arrow">▼</span>
               </div>
             </div>
-
-            <div className="eu-field">
-              <label className="eu-label">Usuario</label>
-              <input
-                className="eu-input"
-                type="text"
-                name="usuario"
-                placeholder="tmontoya"
-                value={form.usuario}
-                onChange={handleChange}
-              />
-            </div>
           </div>
 
           <div className="eu-actions">
-            <button className="eu-btn eu-btn--guardar" onClick={handleGuardar}>
-              Guardar
-            </button>
-            <button className="eu-btn eu-btn--cancelar" onClick={handleCancel}>
+            <button className="eu-btn eu-btn--cancelar" onClick={() => navigate("/users")}>
               Cancelar
+            </button>
+            <button className="eu-btn eu-btn--guardar" onClick={handleGuardar}>
+              Guardar cambios
             </button>
           </div>
         </div>
+      </main>
 
-      </div>
     </div>
   );
 }
