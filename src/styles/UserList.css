@@ -1,0 +1,346 @@
+/* =============================================
+   UserList.css — Lista de usuarios
+   ============================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ── Página ── */
+.ul-page {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 16px 64px;
+}
+
+/* ── Contenedor central ── */
+.ul-container {
+  width: 100%;
+  max-width: 580px;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.10);
+}
+
+/* ── Banner ── */
+.ul-banner {
+  width: 100%;
+  height: 210px;
+  overflow: hidden;
+}
+
+.ul-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* ── Navbar ── */
+.ul-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ul-back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.ul-back-btn:hover {
+  background: #f0f0f0;
+}
+
+.ul-back-icon {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #333;
+  letter-spacing: -2px;
+}
+
+.ul-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background-color: #3aaf6a;
+  color: #ffffff;
+  border: none;
+  border-radius: 7px;
+  padding: 10px 18px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: opacity 0.18s, box-shadow 0.18s, transform 0.12s;
+}
+
+.ul-add-btn:hover {
+  opacity: 0.88;
+  box-shadow: 0 4px 14px rgba(58, 175, 106, 0.35);
+}
+
+.ul-add-btn:active {
+  transform: scale(0.97);
+}
+
+.ul-add-icon {
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+/* ── Contenido ── */
+.ul-content {
+  padding: 28px 24px 40px;
+}
+
+/* ── Título ── */
+.ul-title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #111;
+  text-align: center;
+  padding-bottom: 12px;
+  border-bottom: 2.5px solid #3aaf6a;
+  letter-spacing: 0.05em;
+  margin-bottom: 20px;
+}
+
+/* ── Subtítulo ── */
+.ul-subtitle {
+  font-size: 0.92rem;
+  color: #444;
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+
+/* ── Lista ── */
+.ul-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ul-empty {
+  text-align: center;
+  color: #aaa;
+  font-size: 0.9rem;
+  padding: 24px 0;
+}
+
+/* ── Card de usuario ── */
+.ul-card {
+  border: 1.5px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 14px 16px 12px;
+  background: #ffffff;
+  transition: box-shadow 0.2s;
+}
+
+.ul-card:hover {
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.ul-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.ul-nombre {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.ul-cargo {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+}
+
+/* ── Botones de acción ── */
+.ul-card-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.ul-btn {
+  padding: 7px 22px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.18s, transform 0.12s;
+}
+
+.ul-btn:hover {
+  opacity: 0.85;
+}
+
+.ul-btn:active {
+  transform: scale(0.96);
+}
+
+.ul-btn--verde {
+  background-color: #28a745;
+  color: white;
+}
+
+.ul-btn--rojo {
+  background-color: #dc3545;
+  color: white;
+}
+
+.ul-btn--editar {
+  background-color: #3aaf6a;
+  color: #ffffff;
+}
+
+.ul-btn--inhabilitar {
+  background-color: #ec6e47;
+  color: #ffffff;
+}
+
+.ul-btn--eliminar {
+  background-color: #e84e4e;
+  color: #ffffff;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: #eee;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  width: 400px;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn-si {
+  background: #5acb2f;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-no {
+  background: red;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Botones dinámicos */
+.ul-btn--verde {
+  background-color: green;
+  color: white;
+}
+
+.ul-btn--rojo {
+  background-color: red;
+  color: white;
+}
+
+/* Usuario inactivo */
+.ul-card--disabled {
+  opacity: 0.5;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .ul-page {
+    padding: 20px 12px 48px;
+  }
+
+  .ul-container {
+    border-radius: 10px;
+  }
+
+  .ul-banner {
+    height: 180px;
+  }
+
+  .ul-content {
+    padding: 22px 18px 32px;
+  }
+
+  .ul-title {
+    font-size: 1.45rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .ul-page {
+    padding: 0;
+    background: #fff;
+  }
+
+  .ul-container {
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 100vh;
+  }
+
+  .ul-banner {
+    height: 160px;
+  }
+
+  .ul-content {
+    padding: 18px 14px 28px;
+  }
+
+  .ul-add-btn {
+    font-size: 0.75rem;
+    padding: 9px 12px;
+  }
+}

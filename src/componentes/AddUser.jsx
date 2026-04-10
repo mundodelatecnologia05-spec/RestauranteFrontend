@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../styles/AddUser.css";
 import prueba from "../assets/prueba.jpg";
@@ -12,6 +13,8 @@ export default function AddUser() {
     usuario: "",
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -21,7 +24,7 @@ export default function AddUser() {
   };
 
   const handleCancel = () => {
-    setForm({ nombre: "", correo: "", cargo: "", usuario: "" });
+    navigate("/users");
   };
 
   return (

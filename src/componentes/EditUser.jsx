@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../styles/EditUser.css";
 import prueba from "../assets/prueba.jpg";
@@ -15,6 +16,7 @@ const USUARIO_INICIAL = {
 export default function EditUser() {
   const [form, setForm] = useState(USUARIO_INICIAL);
   const [guardado, setGuardado] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setGuardado(false);
@@ -26,9 +28,8 @@ export default function EditUser() {
     setGuardado(true);
   };
 
-  const handleCancelar = () => {
-    setForm(USUARIO_INICIAL);
-    setGuardado(false);
+  const handleCancel = () => {
+    navigate("/users");
   };
 
   return (
@@ -114,7 +115,7 @@ export default function EditUser() {
             <button className="eu-btn eu-btn--guardar" onClick={handleGuardar}>
               Guardar
             </button>
-            <button className="eu-btn eu-btn--cancelar" onClick={handleCancelar}>
+            <button className="eu-btn eu-btn--cancelar" onClick={handleCancel}>
               Cancelar
             </button>
           </div>
