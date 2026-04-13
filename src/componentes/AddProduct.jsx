@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import "../styles/AddUser.css";
+import "../styles/AddProduct.css";
 import prueba from "../assets/prueba.jpg";
 
 const CATEGORIA = ["Entrada", "Jugos", "Asados", "Postres"];

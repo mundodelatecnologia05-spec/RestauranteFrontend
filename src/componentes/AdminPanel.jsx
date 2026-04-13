@@ -26,9 +26,9 @@ const hoy = new Date().toLocaleDateString("es-CO", {
 export default function AdminPanel() {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // lógica de cierre de sesión
-  };
+ const handleLogout = () => {
+  navigate("/");
+};
 
   return (
     <div className="admin-root">
