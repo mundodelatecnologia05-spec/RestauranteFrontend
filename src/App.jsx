@@ -6,6 +6,10 @@ import AdminPanel  from './componentes/AdminPanel'
 import CreateMenu  from './componentes/CreateMenu'
 import EditProduct from './componentes/EditProduct'
 import AddProduct  from './componentes/AddProduct'
+import Tables from "./componentes/Tables"
+import AddTables from "./componentes/AddTables"
+import EditTables from "./componentes/EditTables"
+import Waiter from "./componentes/Waiter"
 import Login       from './componentes/login'
 
 function App() {
@@ -25,6 +29,12 @@ function App() {
         <Route path="/users"        element={<UserList />} />
         <Route path="/add-user"     element={<AddUser />} />
         <Route path="/edit-user"    element={<EditUser />} />
+        <Route path='/waiter'       element={<Waiter/>} />
+
+        {/* Mesas */}
+        <Route path="/tables"    element={<Tables />} />
+        <Route path="/add-tables"    element={<AddTables />} />
+        <Route path="/edit-tables"    element={<EditTables />} />
 
         {/* Menú y productos */}
         <Route path="/create-menu"  element={<CreateMenu />} />

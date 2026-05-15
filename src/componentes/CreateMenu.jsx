@@ -8,6 +8,7 @@ const PRODUCTOS_INICIALES = [
   { id: 2, nombre: "Limonada",        categoria: "Bebidas",        precio: 15000, imagen: null },
   { id: 3, nombre: "Costilla BBQ",    categoria: "Platos fuertes", precio: 45000, imagen: null },
   { id: 4, nombre: "Dedos de Queso",  categoria: "Entradas",       precio: 34000, imagen: null },
+  { id: 5, nombre: "Pastel Tres Leches",  categoria: "Postres",       precio: 4000, imagen: null },
 ];
 
 function formatPrecio(valor) {

@@ -9,7 +9,7 @@ const STATS = [
 
 const OPCIONES = [
   { nombre: "Menú",     icono: "🍽️", desc: "Platos y categorías",    ruta: '/create-menu',     color: "#f97316", bg: "#fff3e8" },
-  { nombre: "Mesas",    icono: "🪑",  desc: "Estado y reservas",      ruta: "/mesas", color: "#22c55e", bg: "#f0fdf4" },
+  { nombre: "Mesas",    icono: "🪑",  desc: "Estado y reservas",      ruta: "/tables", color: "#22c55e", bg: "#f0fdf4" },
   { nombre: "Pedidos",  icono: "🧾", desc: "Órdenes en curso",        ruta: null,     color: "#3b82f6", bg: "#eff6ff" },
   { nombre: "Usuarios", icono: "👤", desc: "Personal y roles",        ruta: "/users", color: "#a855f7", bg: "#faf5ff" },
   { nombre: "Reportes", icono: "📊", desc: "Ventas y estadísticas",   ruta: null,     color: "#ec4899", bg: "#fdf2f8" },
