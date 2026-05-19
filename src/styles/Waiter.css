@@ -638,6 +638,392 @@ html, body, #root {
 }
 
 /* ════════════════════════════════════════
+   CONSUMO MESA
+   ════════════════════════════════════════ */
+
+.mp-consumo-empty {
+  background: #ffffff;
+  border: 1px solid #EDE8E0;
+  border-radius: 18px;
+  padding: 60px 30px;
+  text-align: center;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+}
+
+.mp-consumo-empty-icon {
+  font-size: 54px;
+  margin-bottom: 12px;
+}
+
+.mp-consumo-empty p:last-child {
+  font-size: 14px;
+  color: #8A7060;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ───────────────────────────────────── */
+
+.mp-consumo-table {
+  background: #ffffff;
+  border: 1px solid #EDE8E0;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 22px rgba(28, 20, 16, 0.04);
+}
+
+.mp-consumo-list {
+  width: 100%;
+}
+
+/* HEADER */
+.mp-consumo-header {
+  display: grid;
+  grid-template-columns: 2fr 100px 140px 140px;
+  gap: 10px;
+  padding: 16px 22px;
+  background: #1C1410;
+  color: #F5E6D0;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(201, 168, 124, 0.15);
+}
+
+.mp-consumo-header span:last-child,
+.mp-consumo-header span:nth-child(2),
+.mp-consumo-header span:nth-child(3) {
+  text-align: center;
+}
+
+/* ITEMS */
+.mp-consumo-item {
+  display: grid;
+  grid-template-columns: 2fr 100px 140px 140px;
+  gap: 10px;
+  align-items: center;
+  padding: 18px 22px;
+  border-bottom: 1px solid #F3EEE8;
+  transition: background 0.14s ease;
+}
+
+.mp-consumo-item:hover {
+  background: #FCFAF7;
+}
+
+.mp-consumo-item:last-child {
+  border-bottom: none;
+}
+
+.mp-consumo-item-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1C1410;
+}
+
+.mp-consumo-item-qty {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #8A5C2E;
+}
+
+.mp-consumo-item-price {
+  text-align: center;
+  font-size: 13px;
+  color: #8A7060;
+  font-weight: 500;
+}
+
+.mp-consumo-item-sub {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #3aaf6a;
+}
+
+/* TOTAL */
+.mp-consumo-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 22px;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 168, 124, 0.08),
+    rgba(201, 168, 124, 0.03)
+  );
+  border-top: 2px solid rgba(201, 168, 124, 0.2);
+}
+
+.mp-consumo-total-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8A7060;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mp-consumo-total-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #3aaf6a;
+}
+
+/* ══════════════════════════════
+   RESPONSIVE CONSUMO
+   ══════════════════════════════ */
+
+@media (max-width: 900px) {
+
+  .mp-consumo-header,
+  .mp-consumo-item {
+    grid-template-columns: 1.6fr 70px 100px 100px;
+    padding: 14px 16px;
+    font-size: 12px;
+  }
+
+  .mp-consumo-item-name {
+    font-size: 13px;
+  }
+
+  .mp-consumo-total-val {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .mp-consumo-table {
+    overflow-x: auto;
+  }
+
+  .mp-consumo-list {
+    min-width: 620px;
+  }
+
+  .mp-consumo-empty {
+    padding: 40px 20px;
+  }
+
+  .mp-consumo-empty-icon {
+    font-size: 44px;
+  }
+}
+
+/* ══════════════════════════════
+   RESUMEN CONSUMO SIDEBAR
+   ══════════════════════════════ */
+
+.mp-consumo-resumen {
+  padding: 18px 20px;
+  border-top: 1px solid rgba(201, 168, 124, 0.08);
+  border-bottom: 1px solid rgba(201, 168, 124, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mp-consumo-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mp-consumo-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #F5E6D0;
+  letter-spacing: 0.3px;
+}
+
+.mp-consumo-val--green {
+  color: #3aaf6a;
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+}
+
+.mp-consumo-val--muted {
+  color: #8A7060;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.mp-mesa-badge--busy {
+  color: #f97316;
+}
+
+/* ══════════════════════════════
+   EMPTY CONSUMO
+   ══════════════════════════════ */
+
+.mp-consumo-empty {
+  background: #ffffff;
+  border: 1px dashed #D8CFC3;
+  border-radius: 18px;
+  padding: 70px 30px;
+  text-align: center;
+}
+
+.mp-consumo-empty-icon {
+  font-size: 54px;
+  margin-bottom: 12px;
+}
+
+.mp-consumo-empty p:last-child {
+  font-size: 14px;
+  color: #8A7060;
+  font-weight: 500;
+}
+
+/* ══════════════════════════════
+   TABLA CONSUMO
+   ══════════════════════════════ */
+
+.mp-consumo-table {
+  background: #ffffff;
+  border: 1px solid #EDE8E0;
+  border-radius: 0px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.mp-consumo-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mp-consumo-header {
+  background: #1C1410;
+  color: #F5E6D0;
+  display: grid;
+  grid-template-columns: 2fr 100px 160px 160px;
+  gap: 10px;
+  padding: 16px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.mp-consumo-item {
+  display: grid;
+  grid-template-columns: 2fr 100px 160px 160px;
+  gap: 10px;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid #F3EEE8;
+  transition: background 0.15s;
+}
+
+.mp-consumo-item:hover {
+  background: #FCFBF9;
+}
+
+.mp-consumo-item-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1C1410;
+}
+
+.mp-consumo-item-qty {
+  font-size: 15px;
+  font-weight: 600;
+  color: #8A7060;
+}
+
+.mp-consumo-item-price {
+  font-size: 15px;
+  color: #8A7060;
+  font-weight: 500;
+}
+
+.mp-consumo-item-sub {
+  font-size: 18px;
+  font-weight: 700;
+  color: #3aaf6a;
+  font-family: 'Playfair Display', serif;
+}
+
+.mp-consumo-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 20px;
+  background: #FCFBF9;
+}
+
+.mp-consumo-total-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8A7060;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mp-consumo-total-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 44px;
+  font-weight: 700;
+  color: #3aaf6a;
+}
+
+/* ══════════════════════════════
+   RESPONSIVE CONSUMO
+   ══════════════════════════════ */
+
+@media (max-width: 900px) {
+
+  .mp-consumo-header,
+  .mp-consumo-item {
+    grid-template-columns: 1.6fr 70px 120px 120px;
+    font-size: 11px;
+  }
+
+  .mp-consumo-item-name {
+    font-size: 15px;
+  }
+
+  .mp-consumo-total-val {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 640px) {
+
+  .mp-consumo-header {
+    display: none;
+  }
+
+  .mp-consumo-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  .mp-consumo-item span {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .mp-consumo-total-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .mp-consumo-total-val {
+    font-size: 28px;
+  }
+}
+
+/* ════════════════════════════════════════
    GRID PRODUCTOS
    ════════════════════════════════════════ */
 .mp-products-grid {
