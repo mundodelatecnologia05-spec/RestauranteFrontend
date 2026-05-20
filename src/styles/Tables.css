@@ -784,3 +784,52 @@ html, body, #root {
     width: 100%;
   }
 }
+/* ── Propina ── */
+.fac-propina-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.fac-propina-btn {
+  flex: 1;
+  min-width: 60px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid #DDD2C4;
+  background: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8A7060;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.fac-propina-btn:hover {
+  border-color: #C9A87C;
+  color: #1C1410;
+  background: #faf5ee;
+}
+
+.fac-propina-btn--active {
+  background: #C9A87C;
+  border-color: #C9A87C;
+  color: #ffffff;
+}
+
+.fac-propina-preview {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(58, 175, 106, 0.08);
+  border: 1px solid rgba(58, 175, 106, 0.25);
+  border-radius: 8px;
+  font-size: 12px;
+  color: #1A6B2E;
+}
+
+.fac-fila.propina {
+  color: #3aaf6a;
+  font-weight: 600;
+}
