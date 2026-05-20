@@ -12,7 +12,7 @@ const OPCIONES = [
   { nombre: "Mesas",    icono: "🪑",  desc: "Estado y reservas",      ruta: "/tables", color: "#22c55e", bg: "#f0fdf4" },
   { nombre: "Pedidos",  icono: "🧾", desc: "Órdenes en curso",        ruta: null,     color: "#3b82f6", bg: "#eff6ff" },
   { nombre: "Usuarios", icono: "👤", desc: "Personal y roles",        ruta: "/users", color: "#a855f7", bg: "#faf5ff" },
-  { nombre: "Reportes", icono: "📊", desc: "Ventas y estadísticas",   ruta: null,     color: "#ec4899", bg: "#fdf2f8" },
+  { nombre: "Reportes", icono: "📊", desc: "Ventas y estadísticas",   ruta: "/reports",     color: "#ec4899", bg: "#fdf2f8" },
   { nombre: "Config",   icono: "⚙️", desc: "Preferencias del sistema",ruta: null,     color: "#64748b", bg: "#f8fafc" },
 ];
 

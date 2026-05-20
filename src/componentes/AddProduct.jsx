@@ -3,14 +3,20 @@ import { useState } from "react";
 import "../styles/AddProduct.css";
 import prueba from "../assets/prueba.jpg";
 
-const CATEGORIA = ["Entrada", "Jugos", "Asados", "Postres"];
+const CATEGORIA = [
+  "Entradas",
+  "Bebidas",
+  "Platos fuertes",
+  "Postres",
+];
 
 export default function AddUser() {
+
   const [form, setForm] = useState({
     nombre: "",
     categoria: "",
     precio: "",
-    estado: "",
+    estado: "Disponible",
   });
 
   const navigate = useNavigate();
@@ -23,13 +29,19 @@ export default function AddUser() {
 
   // 👉 Manejo normal
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   // 👉 Manejo especial precio
   const handlePrecio = (e) => {
+
     const valor = e.target.value;
+
     const limpio = valor.replace(/\D/g, "");
+
     const formateado = formatearPrecio(limpio);
 
     setForm({
@@ -38,24 +50,67 @@ export default function AddUser() {
     });
   };
 
+  // 👉 Guardar en localStorage (cache del navegador)
   const handleAdd = () => {
-    // 🔥 convertir a número real para backend
+
+    if (!form.nombre || !form.categoria || !form.precio) {
+      alert("Completa todos los campos");
+      return;
+    }
+
+    // convertir precio a número
     const precioNumerico = form.precio.replace(/\./g, "");
 
-    const dataFinal = {
-      ...form,
+    const nuevoProducto = {
+      id: Date.now(),
+      nombre: form.nombre,
+      categoria: form.categoria,
       precio: Number(precioNumerico),
+      estado: "Disponible",
     };
 
-    console.log("Producto añadido:", dataFinal);
+    // obtener productos guardados
+    const productosGuardados =
+      JSON.parse(localStorage.getItem("productos")) || [];
+
+    // agregar nuevo producto
+    productosGuardados.push(nuevoProducto);
+
+    // guardar nuevamente
+    localStorage.setItem(
+      "productos",
+      JSON.stringify(productosGuardados)
+    );
+
+    console.log("Producto añadido:", nuevoProducto);
+
+    alert("Producto añadido correctamente");
+
+    // limpiar formulario
+    setForm({
+      nombre: "",
+      categoria: "",
+      precio: "",
+      estado: "Disponible",
+    });
+
+    // volver
+    navigate("/create-menu");
   };
 
   return (
     <div className="au-layout">
+
       {/* ── Sidebar ── */}
       <aside className="au-sidebar">
+
         <div className="au-sidebar-hero">
-          <img src={prueba} alt="Restaurant" className="au-sidebar-hero-img" />
+          <img
+            src={prueba}
+            alt="Restaurant"
+            className="au-sidebar-hero-img"
+          />
+
           <div className="au-sidebar-hero-overlay">
             <p className="au-brand">La Mesa Dorada</p>
             <p className="au-brand-sub">Panel de gestión</p>
@@ -64,6 +119,7 @@ export default function AddUser() {
         </div>
 
         <div className="au-sidebar-profile">
+
           <div className="au-avatar-big">
             {form.nombre
               ? form.nombre
@@ -72,19 +128,25 @@ export default function AddUser() {
                   .slice(0, 2)
                   .join("")
                   .toUpperCase()
-              : "👤"}
+              : "🍽️"}
           </div>
-          <p className="au-profile-name">{form.nombre || "Nuevo producto"}</p>
+
+          <p className="au-profile-name">
+            {form.nombre || "Nuevo producto"}
+          </p>
+
           <p className="au-profile-hint">
             {form.nombre
               ? "Revisá los datos antes de guardar"
-              : "Completa el formulario\npara registrar el producto"}
+              : "Completa el formulario para registrar el producto"}
           </p>
         </div>
 
         <div className="au-sidebar-info">
+
           <div className="au-info-row">
             <span className="au-info-label">Nombre</span>
+
             <span
               className={`au-info-value ${
                 !form.nombre ? "au-info-value--empty" : ""
@@ -94,28 +156,36 @@ export default function AddUser() {
             </span>
           </div>
 
-          <div className="eu-sidebar-info">
-            <div className="eu-info-row">
-              <span className="eu-info-label">Categoría</span>
-              <span className="eu-info-value">{form.categoria || "—"}</span>
-            </div>
-            <div className="eu-info-row">
-              <span className="eu-info-label">Precio</span>
-              <span className="eu-info-value">
-                {form.precio ? `$${form.precio}` : "—"}
-              </span>
-            </div>
-            <div className="eu-info-row">
-              <span className="eu-info-label">Estado</span>
-              <span className="eu-info-value eu-info-value--active">
-                ● Disponible
-              </span>
-            </div>
+          <div className="au-info-row">
+            <span className="au-info-label">Categoría</span>
+
+            <span className="au-info-value">
+              {form.categoria || "—"}
+            </span>
+          </div>
+
+          <div className="au-info-row">
+            <span className="au-info-label">Precio</span>
+
+            <span className="au-info-value">
+              {form.precio ? `$${form.precio}` : "—"}
+            </span>
+          </div>
+
+          <div className="au-info-row">
+            <span className="au-info-label">Estado</span>
+
+            <span className="au-info-value au-info-value--active">
+              ● Disponible
+            </span>
           </div>
         </div>
 
         <div className="au-sidebar-footer">
-          <button className="au-back-btn" onClick={() => navigate("/create-menu")}>
+          <button
+            className="au-back-btn"
+            onClick={() => navigate("/create-menu")}
+          >
             ← Volver
           </button>
         </div>
@@ -123,22 +193,37 @@ export default function AddUser() {
 
       {/* ── Main ── */}
       <main className="au-main">
+
         <div className="au-topbar">
           <div>
             <p className="au-topbar-title">Añadir Producto</p>
-            <p className="au-topbar-sub">Registrar nuevo producto</p>
+            <p className="au-topbar-sub">
+              Registrar nuevo producto
+            </p>
           </div>
-          <span className="au-status-pill">+ Nuevo registro</span>
+
+          <span className="au-status-pill">
+            + Nuevo registro
+          </span>
         </div>
 
         <div className="au-divider" />
 
         <div className="au-content">
-          <p className="au-section-label">Información del producto</p>
+
+          <p className="au-section-label">
+            Información del producto
+          </p>
 
           <div className="au-fields">
+
+            {/* Nombre */}
             <div className="au-field">
-              <label className="au-label">Nombre del producto</label>
+
+              <label className="au-label">
+                Nombre del producto
+              </label>
+
               <input
                 className="au-input"
                 type="text"
@@ -149,9 +234,15 @@ export default function AddUser() {
               />
             </div>
 
+            {/* Categoría */}
             <div className="au-field">
-              <label className="au-label">Categoría</label>
+
+              <label className="au-label">
+                Categoría
+              </label>
+
               <div className="au-select-wrapper">
+
                 <select
                   className="au-select"
                   name="categoria"
@@ -161,21 +252,29 @@ export default function AddUser() {
                   <option value="" disabled hidden>
                     Seleccionar categoría
                   </option>
+
                   {CATEGORIA.map((c) => (
                     <option key={c} value={c}>
                       {c}
                     </option>
                   ))}
                 </select>
-                <span className="au-select-arrow">▼</span>
+
+                <span className="au-select-arrow">
+                  ▼
+                </span>
               </div>
             </div>
 
-            {/* 🔥 PRECIO FORMATEADO */}
-            <div className="eu-field">
-              <label className="eu-label">Precio</label>
+            {/* Precio */}
+            <div className="au-field">
+
+              <label className="au-label">
+                Precio
+              </label>
+
               <input
-                className="eu-input"
+                className="au-input"
                 type="text"
                 name="precio"
                 value={form.precio}
@@ -183,18 +282,25 @@ export default function AddUser() {
                 placeholder="Ej: 15.000"
               />
             </div>
+
           </div>
 
           <div className="au-actions">
+
             <button
               className="au-btn au-btn--cancel"
               onClick={() => navigate("/create-menu")}
             >
               Cancelar
             </button>
-            <button className="au-btn au-btn--add" onClick={handleAdd}>
+
+            <button
+              className="au-btn au-btn--add"
+              onClick={handleAdd}
+            >
               Añadir producto
             </button>
+
           </div>
         </div>
       </main>

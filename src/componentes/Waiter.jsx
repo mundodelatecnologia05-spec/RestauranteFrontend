@@ -15,15 +15,15 @@ const MESAS_INICIALES = [
   { id: 10, numero: "10", estado: "libre" },
 ];
 
-const CATEGORIAS = ["Todos", "Entradas", "Platos fuertes", "Bebidas", "Postres"];
-
 const PRODUCTOS_INICIALES = [
-  { id: 1, nombre: "Jugo de Fresa",    categoria: "Bebidas",        precio: 15000, imagen: null },
-  { id: 2, nombre: "Limonada",         categoria: "Bebidas",        precio: 15000, imagen: null },
-  { id: 3, nombre: "Costilla BBQ",     categoria: "Platos fuertes", precio: 45000, imagen: null },
-  { id: 4, nombre: "Dedos de Queso",   categoria: "Entradas",       precio: 34000, imagen: null },
-  { id: 5, nombre: "Pastel Tres Leche",categoria: "Postres",        precio: 4000,  imagen: null },
+  { id: 1, nombre: "Jugo de Fresa",     categoria: "Bebidas",        precio: 15000, imagen: null },
+  { id: 2, nombre: "Limonada",          categoria: "Bebidas",        precio: 15000, imagen: null },
+  { id: 3, nombre: "Costilla BBQ",      categoria: "Platos fuertes", precio: 45000, imagen: null },
+  { id: 4, nombre: "Dedos de Queso",    categoria: "Entradas",       precio: 34000, imagen: null },
+  { id: 5, nombre: "Pastel Tres Leche", categoria: "Postres",        precio: 4000,  imagen: null },
 ];
+
+const CATEGORIAS = ["Todos", "Entradas", "Platos fuertes", "Bebidas", "Postres"];
 
 function formatPrecio(v) {
   return "$ " + v.toLocaleString("es-CO");
@@ -36,19 +36,22 @@ const hoy = new Date().toLocaleDateString("es-CO", {
 export default function MeseroPanel() {
   const navigate = useNavigate();
 
-  const productosGuardados = JSON.parse(localStorage.getItem("productos")) || [];
-  const PRODUCTOS = [...PRODUCTOS_INICIALES, ...productosGuardados];
+  const [mesas, setMesas]                       = useState([]);
+  const [productos, setProductos]               = useState([]);
+  const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
+  const [mesaConsumo, setMesaConsumo]           = useState(null);
+  const [categoriaActiva, setCategoriaActiva]   = useState("Todos");
+  const [pedido, setPedido]                     = useState([]);
+  const [confirming, setConfirming]             = useState(false);
+  const [success, setSuccess]                   = useState(false);
 
-  const [mesas, setMesas]                             = useState([]);
-  const [mesaSeleccionada, setMesaSeleccionada]       = useState(null);
-  const [mesaConsumo, setMesaConsumo]                 = useState(null);
-  const [categoriaActiva, setCategoriaActiva]         = useState("Todos");
-  const [pedido, setPedido]                           = useState([]);
-  const [confirming, setConfirming]                   = useState(false);
-  const [success, setSuccess]                         = useState(false);
-
-  // Cargar mesas sincronizando con localStorage (pedidos activos)
+  /* ── Cargar mesas y productos desde localStorage ── */
   useEffect(() => {
+    /* productos: iniciales + los que el admin haya guardado */
+    const guardados = JSON.parse(localStorage.getItem("productos")) || [];
+    setProductos([...PRODUCTOS_INICIALES, ...guardados]);
+
+    /* mesas */
     const mesasConEstado = MESAS_INICIALES.map((m) => {
       const pedidoGuardado = localStorage.getItem(`pedido_mesa_${m.id}`);
       if (pedidoGuardado && m.estado !== "inhabilitada") {
@@ -57,21 +60,27 @@ export default function MeseroPanel() {
       return m;
     });
 
-    // Agregar mesas personalizadas del admin
     const mesasAdmin = JSON.parse(localStorage.getItem("mesas")) || [];
     const mesasExtra = mesasAdmin
       .filter((m) => m.id > 10)
       .map((m) => {
         const pedidoGuardado = localStorage.getItem(`pedido_mesa_${m.id}`);
         let estado = m.estado === "inhabilitada" ? "inhabilitada" : "libre";
-        if (pedidoGuardado && estado !== "inhabilitada") {
-          estado = "ocupada";
-        }
+        if (pedidoGuardado && estado !== "inhabilitada") estado = "ocupada";
         return { ...m, estado };
       });
 
     setMesas([...mesasConEstado, ...mesasExtra]);
   }, []);
+
+  /* ── Recargar productos cuando el mesero abre la vista de menú ── */
+  const abrirMenuMesa = (mesa) => {
+    const guardados = JSON.parse(localStorage.getItem("productos")) || [];
+    setProductos([...PRODUCTOS_INICIALES, ...guardados]);
+    setMesaSeleccionada(mesa);
+    setPedido([]);
+    setSuccess(false);
+  };
 
   /* ── helpers pedido ── */
   const agregarItem = (producto) => {
@@ -100,10 +109,72 @@ export default function MeseroPanel() {
   const totalPedido  = pedido.reduce((acc, i) => acc + i.producto.precio * i.cantidad, 0);
   const itemsCount   = pedido.reduce((acc, i) => acc + i.cantidad, 0);
 
-  const productosFiltrados =
-    categoriaActiva === "Todos"
-      ? PRODUCTOS
-      : PRODUCTOS.filter((p) => p.categoria === categoriaActiva);
+/* ─────────────────────────────────────
+   NORMALIZAR CATEGORÍAS
+───────────────────────────────────── */
+const normalizarCategoria = (categoria) => {
+  if (!categoria) return "Otros";
+
+  const cat = categoria.toLowerCase().trim();
+
+  if (
+    cat.includes("entrada")
+  ) {
+    return "Entradas";
+  }
+
+  if (
+    cat.includes("jugo") ||
+    cat.includes("bebida")
+  ) {
+    return "Bebidas";
+  }
+
+  if (
+    cat.includes("asado") ||
+    cat.includes("plato")
+  ) {
+    return "Platos fuertes";
+  }
+
+  if (
+    cat.includes("postre")
+  ) {
+    return "Postres";
+  }
+
+  return categoria;
+};
+
+/* ─────────────────────────────────────
+   PRODUCTOS NORMALIZADOS
+───────────────────────────────────── */
+const productosNormalizados = productos.map((p) => ({
+  ...p,
+  categoria: normalizarCategoria(p.categoria),
+}));
+
+/* ─────────────────────────────────────
+   CATEGORÍAS DINÁMICAS
+───────────────────────────────────── */
+const categoriasDisponibles = [
+  "Todos",
+  ...Array.from(
+    new Set(
+      productosNormalizados.map((p) => p.categoria)
+    )
+  ),
+];
+
+/* ─────────────────────────────────────
+   PRODUCTOS FILTRADOS
+───────────────────────────────────── */
+const productosFiltrados =
+  categoriaActiva === "Todos"
+    ? productosNormalizados
+    : productosNormalizados.filter(
+        (p) => p.categoria === categoriaActiva
+      );
 
   const seleccionarMesa = (mesa) => {
     if (mesa.estado === "inhabilitada") return;
@@ -112,9 +183,7 @@ export default function MeseroPanel() {
       setMesaConsumo({ mesa, consumo });
       return;
     }
-    setMesaSeleccionada(mesa);
-    setPedido([]);
-    setSuccess(false);
+    abrirMenuMesa(mesa);
   };
 
   const volverAMesas = () => {
@@ -127,9 +196,9 @@ export default function MeseroPanel() {
 
   const confirmarPedido = () => {
     const nuevoPedido = {
-      mesaNumero : mesaSeleccionada.numero,
-      mesaId     : mesaSeleccionada.id,
-      items      : pedido.map((i) => ({
+      mesaNumero: mesaSeleccionada.numero,
+      mesaId    : mesaSeleccionada.id,
+      items     : pedido.map((i) => ({
         nombre  : i.producto.nombre,
         precio  : i.producto.precio,
         cantidad: i.cantidad,
@@ -138,25 +207,19 @@ export default function MeseroPanel() {
       fecha: new Date().toLocaleString("es-CO"),
     };
 
-    // Guardar pedido en localStorage con key estandar
     localStorage.setItem(
       `pedido_mesa_${mesaSeleccionada.id}`,
       JSON.stringify(nuevoPedido)
     );
 
-    // Sincronizar estado de mesa con el admin (mesas guardadas)
-    const mesasAdmin = JSON.parse(localStorage.getItem("mesas")) || [];
+    const mesasAdmin     = JSON.parse(localStorage.getItem("mesas")) || [];
     const mesasActualizadas = mesasAdmin.map((m) =>
       m.id === mesaSeleccionada.id ? { ...m, estado: "consumo" } : m
     );
-    // Si no estaba en las mesas del admin (es mesa inicial), agregarla como referencia
     const yaExiste = mesasAdmin.find((m) => m.id === mesaSeleccionada.id);
-    if (!yaExiste) {
-      mesasActualizadas.push({ ...mesaSeleccionada, estado: "consumo" });
-    }
+    if (!yaExiste) mesasActualizadas.push({ ...mesaSeleccionada, estado: "consumo" });
     localStorage.setItem("mesas", JSON.stringify(mesasActualizadas));
 
-    // Actualizar estado local
     setMesas((prev) =>
       prev.map((m) =>
         m.id === mesaSeleccionada.id ? { ...m, estado: "ocupada" } : m
@@ -365,7 +428,7 @@ export default function MeseroPanel() {
             <div className="mp-divider" />
 
             <div className="mp-cats">
-              {CATEGORIAS.map((cat) => (
+              {categoriasDisponibles.map((cat) => (
                 <button
                   key={cat}
                   className={`mp-cat-btn${categoriaActiva === cat ? " mp-cat-btn--active" : ""}`}
@@ -377,41 +440,48 @@ export default function MeseroPanel() {
             </div>
 
             <div className="mp-content">
-              <div className="mp-products-grid">
-                {productosFiltrados.map((p) => {
-                  const qty = cantidadItem(p.id);
-                  return (
-                    <div
-                      key={p.id}
-                      className={`mp-product-card${qty > 0 ? " mp-product-card--selected" : ""}`}
-                    >
-                      {p.imagen ? (
-                        <img src={p.imagen} alt={p.nombre} className="mp-product-img" />
-                      ) : (
-                        <div className="mp-product-emoji">🍽️</div>
-                      )}
-                      <div className="mp-product-body">
-                        <p className="mp-product-name">{p.nombre}</p>
-                        <span className="mp-product-cat">{p.categoria}</span>
-                        <p className="mp-product-price">{formatPrecio(p.precio)}</p>
-                      </div>
-                      <div className="mp-product-actions">
-                        {qty === 0 ? (
-                          <button className="mp-add-item-btn" onClick={() => agregarItem(p)}>
-                            + Agregar
-                          </button>
+              {productosFiltrados.length === 0 ? (
+                <div className="mp-no-productos">
+                  <p>🍽️</p>
+                  <p>No hay productos en esta categoría</p>
+                </div>
+              ) : (
+                <div className="mp-products-grid">
+                  {productosFiltrados.map((p) => {
+                    const qty = cantidadItem(p.id);
+                    return (
+                      <div
+                        key={p.id}
+                        className={`mp-product-card${qty > 0 ? " mp-product-card--selected" : ""}`}
+                      >
+                        {p.imagen ? (
+                          <img src={p.imagen} alt={p.nombre} className="mp-product-img" />
                         ) : (
-                          <div className="mp-qty-control">
-                            <button className="mp-qty-ctrl-btn" onClick={() => quitarItem(p.id)}>−</button>
-                            <span className="mp-qty-ctrl-num">{qty}</span>
-                            <button className="mp-qty-ctrl-btn" onClick={() => agregarItem(p)}>+</button>
-                          </div>
+                          <div className="mp-product-emoji">🍽️</div>
                         )}
+                        <div className="mp-product-body">
+                          <p className="mp-product-name">{p.nombre}</p>
+                          <span className="mp-product-cat">{p.categoria}</span>
+                          <p className="mp-product-price">{formatPrecio(p.precio)}</p>
+                        </div>
+                        <div className="mp-product-actions">
+                          {qty === 0 ? (
+                            <button className="mp-add-item-btn" onClick={() => agregarItem(p)}>
+                              + Agregar
+                            </button>
+                          ) : (
+                            <div className="mp-qty-control">
+                              <button className="mp-qty-ctrl-btn" onClick={() => quitarItem(p.id)}>−</button>
+                              <span className="mp-qty-ctrl-num">{qty}</span>
+                              <button className="mp-qty-ctrl-btn" onClick={() => agregarItem(p)}>+</button>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </main>
         </div>

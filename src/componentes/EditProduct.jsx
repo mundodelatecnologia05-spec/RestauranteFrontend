@@ -1,116 +1,339 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "../styles/EditProduct.css";
 import prueba from "../assets/prueba.jpg";
 
-const CATEGORIAS = ["Bebidas", "Entradas", "Platos fuertes", "Postres"];
+const CATEGORIAS = [
+  "Bebidas",
+  "Entradas",
+  "Platos fuertes",
+  "Postres",
+];
 
-const PRODUCTO_INICIAL = {
-  nombre: "Jugo de Fresa",
-  categoria: "Bebidas",
-  precio: 15000,
-  imagen: "",
-};
+const PRODUCTOS_INICIALES = [
+  {
+    id: 1,
+    nombre: "Jugo de Fresa",
+    categoria: "Bebidas",
+    precio: 15000,
+    imagen: null,
+  },
+  {
+    id: 2,
+    nombre: "Limonada",
+    categoria: "Bebidas",
+    precio: 15000,
+    imagen: null,
+  },
+  {
+    id: 3,
+    nombre: "Costilla BBQ",
+    categoria: "Platos fuertes",
+    precio: 45000,
+    imagen: null,
+  },
+  {
+    id: 4,
+    nombre: "Dedos de Queso",
+    categoria: "Entradas",
+    precio: 34000,
+    imagen: null,
+  },
+  {
+    id: 5,
+    nombre: "Pastel Tres Leches",
+    categoria: "Postres",
+    precio: 4000,
+    imagen: null,
+  },
+];
 
 export default function EditProduct() {
-  const [preview, setPreview] = useState("");
-  const [form, setForm] = useState(PRODUCTO_INICIAL);
-  const [guardado, setGuardado] = useState(false);
+
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setGuardado(false);
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const [searchParams] = useSearchParams();
 
-  const handleGuardar = () => {
-    console.log("Producto actualizado:", form);
-    setGuardado(true);
-  };
+  const id = Number(searchParams.get("id"));
 
-  const handleImagen = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setForm({ ...form, imagen: file });
+  const [preview, setPreview] = useState("");
 
-      // vista previa
-      const url = URL.createObjectURL(file);
-      setPreview(url);
+  const [guardado, setGuardado] = useState(false);
+
+  const [form, setForm] = useState({
+    id: "",
+    nombre: "",
+    categoria: "",
+    precio: "",
+    imagen: "",
+  });
+
+  /* ───────── CARGAR PRODUCTO ───────── */
+  useEffect(() => {
+
+    const productosGuardados =
+      JSON.parse(localStorage.getItem("productos")) || [];
+
+    const productosEditados =
+      JSON.parse(localStorage.getItem("productosEditados")) || [];
+
+    // reemplazar productos iniciales si fueron editados
+    const inicialesActualizados =
+      PRODUCTOS_INICIALES.map((productoInicial) => {
+
+        const editado = productosEditados.find(
+          (p) => p.id === productoInicial.id
+        );
+
+        return editado || productoInicial;
+      });
+
+    const todos = [
+      ...inicialesActualizados,
+      ...productosGuardados,
+    ];
+
+    const productoEncontrado =
+      todos.find((p) => p.id === id);
+
+    if (productoEncontrado) {
+
+      setForm(productoEncontrado);
+
+      if (productoEncontrado.imagen) {
+        setPreview(productoEncontrado.imagen);
+      }
     }
+
+  }, [id]);
+
+  /* ───────── INPUTS ───────── */
+  const handleChange = (e) => {
+
+    setGuardado(false);
+
+    setForm({
+      ...form,
+      [e.target.name]:
+        e.target.name === "precio"
+          ? Number(e.target.value)
+          : e.target.value,
+    });
+  };
+
+  /* ───────── IMAGEN ───────── */
+  const handleImagen = (e) => {
+
+    const file = e.target.files[0];
+
+    if (file) {
+
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+
+        setForm({
+          ...form,
+          imagen: reader.result,
+        });
+
+        setPreview(reader.result);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  /* ───────── GUARDAR ───────── */
+  const handleGuardar = () => {
+
+    // productos editados
+    const productosEditados =
+      JSON.parse(localStorage.getItem("productosEditados")) || [];
+
+    const existeEditado =
+      productosEditados.find((p) => p.id === id);
+
+    let nuevosEditados = [];
+
+    if (existeEditado) {
+
+      nuevosEditados = productosEditados.map((p) =>
+        p.id === id ? form : p
+      );
+
+    } else {
+
+      nuevosEditados = [
+        ...productosEditados,
+        form,
+      ];
+    }
+
+    localStorage.setItem(
+      "productosEditados",
+      JSON.stringify(nuevosEditados)
+    );
+
+    // productos personalizados
+    const personalizados =
+      JSON.parse(localStorage.getItem("productos")) || [];
+
+    const personalizadosActualizados =
+      personalizados.map((p) =>
+        p.id === id ? form : p
+      );
+
+    localStorage.setItem(
+      "productos",
+      JSON.stringify(personalizadosActualizados)
+    );
+
+    setGuardado(true);
+
+    setTimeout(() => {
+      navigate("/create-menu");
+    }, 1200);
   };
 
   return (
     <div className="eu-layout">
-      {/* ── Sidebar ── */}
+
+      {/* ───────── SIDEBAR ───────── */}
       <aside className="eu-sidebar">
+
         <div className="eu-sidebar-hero">
-          <img src={prueba} alt="Restaurant" className="eu-sidebar-hero-img" />
+
+          <img
+            src={prueba}
+            alt="Restaurant"
+            className="eu-sidebar-hero-img"
+          />
+
           <div className="eu-sidebar-hero-overlay">
-            <p className="eu-brand">La Mesa Dorada</p>
-            <p className="eu-brand-sub">Panel de productos</p>
+
+            <p className="eu-brand">
+              La Mesa Dorada
+            </p>
+
+            <p className="eu-brand-sub">
+              Panel de productos
+            </p>
+
             <div className="eu-gold-line" />
+
           </div>
         </div>
 
         <div className="eu-sidebar-profile">
+
           <div className="eu-avatar-big">
-            {form.nombre.slice(0, 2).toUpperCase()}
+            {form.nombre
+              ? form.nombre.slice(0, 2).toUpperCase()
+              : "PR"}
           </div>
-          <p className="eu-profile-name">{form.nombre}</p>
-          <span className="eu-profile-badge">{form.categoria}</span>
+
+          <p className="eu-profile-name">
+            {form.nombre}
+          </p>
+
+          <span className="eu-profile-badge">
+            {form.categoria}
+          </span>
+
         </div>
 
         <div className="eu-sidebar-info">
+
           <div className="eu-info-row">
-            <span className="eu-info-label">Categoría</span>
-            <span className="eu-info-value">{form.categoria}</span>
+            <span className="eu-info-label">
+              Categoría
+            </span>
+
+            <span className="eu-info-value">
+              {form.categoria}
+            </span>
           </div>
+
           <div className="eu-info-row">
-            <span className="eu-info-label">Precio</span>
-            <span className="eu-info-value">${form.precio}</span>
+            <span className="eu-info-label">
+              Precio
+            </span>
+
+            <span className="eu-info-value">
+              ${Number(form.precio).toLocaleString("es-CO")}
+            </span>
           </div>
+
           <div className="eu-info-row">
-            <span className="eu-info-label">Estado</span>
+            <span className="eu-info-label">
+              Estado
+            </span>
+
             <span className="eu-info-value eu-info-value--active">
               ● Disponible
             </span>
           </div>
+
         </div>
 
         <div className="eu-sidebar-footer">
+
           <button
             className="eu-back-btn"
             onClick={() => navigate("/create-menu")}
           >
             ← Volver a productos
           </button>
+
         </div>
       </aside>
 
-      {/* ── Main ── */}
+      {/* ───────── MAIN ───────── */}
       <main className="eu-main">
+
         <div className="eu-topbar">
+
           <div>
-            <p className="eu-topbar-title">Editar Producto</p>
-            <p className="eu-topbar-sub">Modificar información del menú</p>
+
+            <p className="eu-topbar-title">
+              Editar Producto
+            </p>
+
+            <p className="eu-topbar-sub">
+              Modificar información del menú
+            </p>
+
           </div>
-          <span className="eu-status-pill">● Editando</span>
+
+          <span className="eu-status-pill">
+            ● Editando
+          </span>
+
         </div>
 
         <div className="eu-divider" />
 
         <div className="eu-content">
+
           {guardado && (
             <div className="eu-alert">
               ✅ Producto actualizado correctamente
             </div>
           )}
 
-          <p className="eu-section-label">Información del producto</p>
+          <p className="eu-section-label">
+            Información del producto
+          </p>
 
           <div className="eu-fields">
+
             <div className="eu-field">
-              <label className="eu-label">Nombre del producto</label>
+
+              <label className="eu-label">
+                Nombre del producto
+              </label>
+
               <input
                 className="eu-input"
                 type="text"
@@ -119,10 +342,15 @@ export default function EditProduct() {
                 onChange={handleChange}
                 placeholder="Nombre del producto"
               />
+
             </div>
 
             <div className="eu-field">
-              <label className="eu-label">Precio</label>
+
+              <label className="eu-label">
+                Precio
+              </label>
+
               <input
                 className="eu-input"
                 type="number"
@@ -131,51 +359,66 @@ export default function EditProduct() {
                 onChange={handleChange}
                 placeholder="Precio"
               />
+
             </div>
 
             <div className="eu-field">
-              <label className="eu-label">Categoría</label>
+
+              <label className="eu-label">
+                Categoría
+              </label>
+
               <div className="eu-select-wrapper">
+
                 <select
                   className="eu-select"
                   name="categoria"
                   value={form.categoria}
                   onChange={handleChange}
                 >
-                  <option value="" disabled hidden>
-                    Seleccionar categoría
-                  </option>
                   {CATEGORIAS.map((c) => (
                     <option key={c} value={c}>
                       {c}
                     </option>
                   ))}
                 </select>
-                <span className="eu-select-arrow">▼</span>
+
+                <span className="eu-select-arrow">
+                  ▼
+                </span>
+
               </div>
             </div>
 
             <div className="eu-field eu-field--full">
-              <label className="eu-label">Imagen del producto</label>
 
-              {/* Input URL */}
+              <label className="eu-label">
+                Imagen del producto
+              </label>
+
               <input
                 className="eu-input"
                 type="text"
                 name="imagen"
-                value={typeof form.imagen === "string" ? form.imagen : ""}
+                value={
+                  typeof form.imagen === "string"
+                    ? form.imagen
+                    : ""
+                }
                 onChange={handleChange}
                 placeholder="Pegar URL de imagen"
               />
 
-              {/* Separador */}
               <p
-                style={{ fontSize: "11px", color: "#8A7060", margin: "6px 0" }}
+                style={{
+                  fontSize: "11px",
+                  color: "#8A7060",
+                  margin: "6px 0",
+                }}
               >
                 o subir desde tu equipo
               </p>
 
-              {/* Input file */}
               <input
                 className="eu-input"
                 type="file"
@@ -183,7 +426,6 @@ export default function EditProduct() {
                 onChange={handleImagen}
               />
 
-              {/* Preview */}
               {(preview || form.imagen) && (
                 <img
                   src={preview || form.imagen}
@@ -198,19 +440,26 @@ export default function EditProduct() {
                   }}
                 />
               )}
+
             </div>
           </div>
 
           <div className="eu-actions">
+
             <button
               className="eu-btn eu-btn--cancelar"
               onClick={() => navigate("/create-menu")}
             >
               Cancelar
             </button>
-            <button className="eu-btn eu-btn--guardar" onClick={handleGuardar}>
+
+            <button
+              className="eu-btn eu-btn--guardar"
+              onClick={handleGuardar}
+            >
               Guardar cambios
             </button>
+
           </div>
         </div>
       </main>
