@@ -414,3 +414,77 @@ html, body, #root {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Pegar al final de AddProduct.css ── */
+
+.au-input-with-unit {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.au-input-with-unit .au-input {
+  padding-right: 80px;
+}
+
+.au-unit-tag {
+  position: absolute;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8A7060;
+  background: #F5EFE6;
+  padding: 3px 8px;
+  border-radius: 6px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.au-field-hint {
+  font-size: 11px;
+  color: #B0A090;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.au-stock-badge { font-size: 12px !important; }
+.au-stock-badge--ok      { color: #3aaf6a !important; }
+.au-stock-badge--bajo    { color: #C9860C !important; }
+.au-stock-badge--agotado { color: #e84e4e !important; }
+.au-stock-badge--empty   { color: #B0A090 !important; }
+
+.au-stock-preview {
+  grid-column: 1 / -1;
+  border-radius: 10px;
+  padding: 14px 16px;
+  border: 1px solid #EDE8E0;
+  background: #FDFAF6;
+}
+.au-stock-preview--ok      { border-color: rgba(58,175,106,0.3);  background: #f4fff8; }
+.au-stock-preview--bajo    { border-color: rgba(249,179,0,0.3);   background: #fffdf0; }
+.au-stock-preview--agotado { border-color: rgba(232,78,78,0.3);   background: #fff5f5; }
+
+.au-stock-preview-bar {
+  height: 8px;
+  background: #EDE8E0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.au-stock-preview-fill {
+  height: 100%;
+  border-radius: 10px;
+  background: #3aaf6a;
+  transition: width 0.4s ease;
+}
+.au-stock-preview--bajo    .au-stock-preview-fill { background: #f9b300; }
+.au-stock-preview--agotado .au-stock-preview-fill { background: #e84e4e; }
+
+.au-stock-preview-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 500;
+  color: #5A4A3A;
+}

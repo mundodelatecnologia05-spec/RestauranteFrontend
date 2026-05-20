@@ -324,3 +324,68 @@ html, body, #root {
   .rp-table-head--mesa span:nth-child(3),
   .rp-table-head--mesa span:nth-child(4) { display: none; }
 }
+
+/* ════════════════════════════════════════
+   STOCK / INVENTARIO
+   ════════════════════════════════════════ */
+.rp-sidebar-meta-val--red { color: #e84e4e; }
+
+.rp-card--alert { border-color: rgba(232,78,78,0.25); background: #fff9f9; }
+.rp-alert-list  { display: flex; flex-direction: column; gap: 10px; }
+.rp-alert-row   { display: grid; grid-template-columns: 1fr auto 120px; align-items: center; gap: 12px; }
+.rp-alert-name  { font-size: 13px; font-weight: 500; color: #1C1410; }
+.rp-alert-stock { font-size: 11px; color: #e84e4e; font-weight: 600; white-space: nowrap; }
+.rp-alert-bar-wrap { height: 6px; background: #F5EFE6; border-radius: 10px; overflow: hidden; }
+.rp-alert-bar      { height: 100%; background: #e84e4e; border-radius: 10px; }
+.rp-ver-mas { background: none; border: none; color: #C9A87C; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; padding: 4px 0; text-align: left; }
+.rp-ver-mas:hover { color: #8A5C2E; }
+
+.rp-inv-alert-banner {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 20px;
+  background: rgba(232,78,78,0.08);
+  border: 1px solid rgba(232,78,78,0.25);
+  border-radius: 10px;
+  font-size: 14px; color: #c93c3c; font-weight: 500;
+}
+.rp-inv-alert-banner strong { color: #e84e4e; }
+
+.rp-inv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+.rp-inv-card {
+  background: #fff; border: 1px solid #EDE8E0; border-radius: 14px; padding: 16px 18px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.rp-inv-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(201,168,124,0.12); }
+.rp-inv-card--critico { border-color: rgba(232,78,78,0.35); background: #fff9f9; }
+.rp-inv-card--bajo    { border-color: rgba(249,179,0,0.35);  background: #fffdf5; }
+
+.rp-inv-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.rp-inv-cat       { font-size: 10px; color: #8A7060; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.rp-inv-badge     { font-size: 10px; font-weight: 600; padding: 2px 9px; border-radius: 20px; }
+.rp-inv-badge--ok      { background: rgba(58,175,106,0.1); color: #1A6B2E; }
+.rp-inv-badge--bajo    { background: rgba(249,179,0,0.15);  color: #8A6000; }
+.rp-inv-badge--critico { background: rgba(232,78,78,0.12);  color: #c93c3c; }
+
+.rp-inv-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: #1C1410; margin-bottom: 12px; }
+
+.rp-inv-stocks     { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.rp-inv-stock-row  { display: flex; justify-content: space-between; align-items: center; }
+.rp-inv-stock-label { font-size: 11px; color: #8A7060; font-weight: 500; }
+.rp-inv-stock-val  { font-size: 13px; font-weight: 700; }
+.rp-inv-stock-val--ok      { color: #3aaf6a; }
+.rp-inv-stock-val--bajo    { color: #C9860C; }
+.rp-inv-stock-val--critico { color: #e84e4e; }
+.rp-inv-stock-val--muted   { color: #8A7060; font-weight: 400; }
+
+.rp-inv-bar-wrap { height: 6px; background: #F5EFE6; border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+.rp-inv-bar      { height: 100%; border-radius: 10px; transition: width 0.5s ease; }
+.rp-inv-bar--ok      { background: #3aaf6a; }
+.rp-inv-bar--bajo    { background: #f9b300; }
+.rp-inv-bar--critico { background: #e84e4e; }
+
+.rp-inv-price     { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid #F5EFE6; }
+.rp-inv-price-val { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; color: #1C1410; }
+
+@media (max-width: 1100px) { .rp-inv-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 540px)  { .rp-inv-grid { grid-template-columns: 1fr; } }
