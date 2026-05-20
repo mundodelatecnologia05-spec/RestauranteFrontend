@@ -485,3 +485,302 @@ html, body, #root {
 @media (max-width: 480px) {
   .ms-grid { grid-template-columns: repeat(2, 1fr); }
 }
+/* ══════════════════════════════
+   desde aqui empieza las pruebas css
+   ══════════════════════════════ */
+
+
+.fac-modal-wrapper {
+  width: 640px;
+  max-width: 92vw;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 24px 26px 22px;
+  text-align: left;
+  background: #ffffff;
+  border-radius: 18px;
+  border-top: 4px solid #C9A87C;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.22);
+}
+
+/* ── Header ── */
+.fac-modal-wrapper .modal-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: rgba(201, 168, 124, 0.12);
+  border: 1px solid rgba(201, 168, 124, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 12px;
+}
+
+.fac-modal-wrapper h2 {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1C1410;
+  margin-bottom: 20px;
+}
+
+/* ─────────────────────────────
+   FORM
+   ───────────────────────────── */
+.fac-form {
+  background: #faf8f5;
+  border: 1px solid #E8DFD3;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.fac-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.fac-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fac-form-group label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8A7060;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.fac-form-group input,
+.fac-form-group select {
+  height: 40px;
+  border-radius: 9px;
+  border: 1px solid #DDD2C4;
+  background: #ffffff;
+  padding: 0 12px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  color: #1C1410;
+}
+
+.fac-form-group input:focus,
+.fac-form-group select:focus {
+  outline: none;
+  border-color: #C9A87C;
+  box-shadow: 0 0 0 3px rgba(201, 168, 124, 0.12);
+}
+
+/* ───────────────────────────── */
+.fac-divider-gold {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #C9A87C,
+    transparent
+  );
+  margin: 18px 0;
+}
+
+/* ─────────────────────────────
+   FACTURA
+   ───────────────────────────── */
+.fac-brand {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1C1410;
+}
+
+.fac-brand-sub {
+  text-align: center;
+  margin-top: 3px;
+  font-size: 9px;
+  font-weight: 600;
+  color: #C9A87C;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.fac-gold-line {
+  width: 55px;
+  height: 2px;
+  background: #C9A87C;
+  margin: 10px auto 12px;
+}
+
+.fac-numero {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #8A7060;
+  text-transform: uppercase;
+}
+
+.fac-dashed {
+  border-top: 1px dashed #D8CBBE;
+  margin: 16px 0;
+}
+
+/* ─────────────────────────────
+   INFO
+   ───────────────────────────── */
+.fac-info-grid {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 8px 12px;
+}
+
+.fac-info-grid .lbl {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8A7060;
+  text-transform: uppercase;
+}
+
+.fac-info-grid .val {
+  font-size: 12px;
+  color: #1C1410;
+  font-weight: 500;
+}
+
+/* ─────────────────────────────
+   TABLA
+   ───────────────────────────── */
+.fac-table-head,
+.fac-item {
+  display: grid;
+  grid-template-columns: 1.7fr 0.5fr 0.8fr 0.9fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.fac-table-head {
+  padding-bottom: 8px;
+  border-bottom: 1px solid #EDE3D7;
+  margin-bottom: 8px;
+}
+
+.fac-table-head span {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8A7060;
+  text-transform: uppercase;
+}
+
+.fac-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #F3EEE7;
+}
+
+.fac-item span {
+  font-size: 12px;
+  color: #1C1410;
+}
+
+.r {
+  text-align: right;
+}
+
+/* ─────────────────────────────
+   TOTALES
+   ───────────────────────────── */
+.fac-totales {
+  margin-top: 14px;
+  background: #faf8f5;
+  border: 1px solid #E8DFD3;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.fac-fila {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  font-size: 13px;
+  color: #5B473A;
+}
+
+.fac-fila.total {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid #DDCFBE;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1C1410;
+}
+
+.fac-fila.total span:last-child {
+  color: #B88646;
+  font-family: 'Playfair Display', serif;
+}
+
+/* ───────────────────────────── */
+.fac-footer {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 12px;
+  color: #8A7060;
+  font-style: italic;
+}
+
+/* ─────────────────────────────
+   BOTONES
+   ───────────────────────────── */
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.btn-imprimir,
+.btn-no {
+  min-width: 140px;
+  height: 42px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ─────────────────────────────
+   RESPONSIVE
+   ───────────────────────────── */
+@media (max-width: 700px) {
+
+  .fac-modal-wrapper {
+    width: 95vw;
+    padding: 18px;
+  }
+
+  .fac-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .fac-table-head,
+  .fac-item {
+    grid-template-columns: 1.5fr 0.4fr 0.7fr 0.8fr;
+    gap: 6px;
+  }
+
+  .fac-brand {
+    font-size: 19px;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+
+  .btn-imprimir,
+  .btn-no {
+    width: 100%;
+  }
+}

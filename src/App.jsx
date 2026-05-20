@@ -11,6 +11,7 @@ import AddTables from "./componentes/AddTables"
 import EditTables from "./componentes/EditTables"
 import Waiter from "./componentes/Waiter"
 import Login       from './componentes/login'
+import Reports from './componentes/Reports'
 
 function App() {
   return (
@@ -35,6 +36,9 @@ function App() {
         <Route path="/tables"    element={<Tables />} />
         <Route path="/add-tables"    element={<AddTables />} />
         <Route path="/edit-tables"    element={<EditTables />} />
+
+        {/* Reportes */}
+        <Route path="/reports"    element={<Reports />} />
 
         {/* Menú y productos */}
         <Route path="/create-menu"  element={<CreateMenu />} />
