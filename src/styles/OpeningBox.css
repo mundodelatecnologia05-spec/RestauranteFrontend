@@ -1,0 +1,377 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body, #root {
+  font-family: 'DM Sans', sans-serif;
+  background: #fafaf9;
+}
+
+/* ── Root ── */
+.caja-root {
+  min-height: 100vh;
+  background: #fafaf9;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+.caja-header {
+  background: #1C1410;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 2px solid #C9A87C;
+}
+
+.caja-back-btn {
+  background: rgba(201,168,124,0.15);
+  border: 1px solid rgba(201,168,124,0.3);
+  color: #C9A87C;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.caja-back-btn:hover { background: rgba(201,168,124,0.25); }
+
+.caja-header-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.caja-header-icon { font-size: 28px; }
+
+.caja-header-title h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: #F5E6D0;
+  font-weight: 700;
+}
+
+.caja-header-title p {
+  font-size: 12px;
+  color: #8A7060;
+  margin-top: 2px;
+}
+
+/* ── Body ── */
+.caja-body {
+  padding: 28px 32px 60px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Estado card ── */
+.caja-estado-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  border-radius: 14px;
+  border: 2px solid;
+}
+
+.caja-estado--abierta {
+  background: rgba(58,175,106,0.08);
+  border-color: rgba(58,175,106,0.3);
+}
+
+.caja-estado--cerrada {
+  background: rgba(220,38,38,0.06);
+  border-color: rgba(220,38,38,0.2);
+}
+
+.caja-estado-icon { font-size: 28px; }
+
+.caja-estado-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8A7060;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.caja-estado-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1C1410;
+  margin-top: 2px;
+}
+
+.caja-estado-sub {
+  font-size: 12px;
+  color: #8A7060;
+  margin-top: 4px;
+}
+
+/* ── Resumen grid ── */
+.caja-resumen-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.caja-resumen-card {
+  background: #ffffff;
+  border: 1px solid #EDE8E0;
+  border-radius: 12px;
+  padding: 16px;
+  border-top: 3px solid #C9A87C;
+}
+
+.caja-resumen-card--ventas { border-top-color: #3aaf6a; }
+.caja-resumen-card--total  { border-top-color: #f97316; }
+
+.caja-resumen-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8A7060;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.caja-resumen-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1C1410;
+  margin-top: 6px;
+}
+
+/* ── Section label ── */
+.caja-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8A7060;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.caja-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #EDE8E0;
+}
+
+/* ── Facturas list ── */
+.caja-facturas {
+  background: #ffffff;
+  border: 1px solid #EDE8E0;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.caja-facturas-list { display: flex; flex-direction: column; gap: 6px; }
+
+.caja-factura-row {
+  display: grid;
+  grid-template-columns: 1.4fr 0.6fr 1fr 0.8fr 0.8fr;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  align-items: center;
+  border-bottom: 1px solid #F3EEE7;
+}
+
+.caja-factura-row:last-child { border-bottom: none; }
+
+.caja-factura-num  { font-weight: 600; color: #8A7060; font-size: 11px; }
+.caja-factura-mesa { font-weight: 600; color: #1C1410; }
+.caja-factura-hora { color: #8A7060; font-size: 11px; }
+.caja-factura-metodo { color: #5B473A; }
+.caja-factura-total { font-weight: 700; color: #1C1410; text-align: right; }
+
+/* ── Botón cerrar caja ── */
+.caja-btn-cerrar {
+  width: 100%;
+  padding: 14px;
+  background: #A33333;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s;
+}
+.caja-btn-cerrar:hover { background: #882828; }
+
+/* ── Botón abrir caja ── */
+.caja-btn-abrir {
+  width: 100%;
+  padding: 14px;
+  background: #3aaf6a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s;
+  margin-top: 6px;
+}
+.caja-btn-abrir:hover { background: #2e9659; }
+
+/* ── Forms ── */
+.caja-apertura-form,
+.caja-cierre-form {
+  background: #ffffff;
+  border: 1px solid #EDE8E0;
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.caja-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.caja-form-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8A7060;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.caja-form-group input,
+.caja-form-group textarea {
+  border: 1px solid #DDD2C4;
+  border-radius: 9px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: #1C1410;
+  background: #fafaf9;
+  resize: none;
+}
+
+.caja-form-group input:focus,
+.caja-form-group textarea:focus {
+  outline: none;
+  border-color: #C9A87C;
+  box-shadow: 0 0 0 3px rgba(201,168,124,0.12);
+}
+
+/* ── Diferencia ── */
+.caja-diferencia {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #faf8f5;
+  border: 1px solid #E8DFD3;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.caja-dif--pos { color: #1A6B2E; }
+.caja-dif--neg { color: #A33333; }
+
+/* ── Cierre btns ── */
+.caja-cierre-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.caja-btn-cancelar {
+  flex: 1;
+  padding: 12px;
+  background: #F5E6D0;
+  color: #8A5C2E;
+  border: 1px solid #DFC9A8;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+.caja-btn-cancelar:hover { background: #EDD8B8; }
+
+.caja-btn-confirmar-cierre {
+  flex: 2;
+  padding: 12px;
+  background: #3aaf6a;
+  color: white;
+  border: none;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+.caja-btn-confirmar-cierre:hover { background: #2e9659; }
+
+/* ── Historial ── */
+.caja-historial {
+  background: #ffffff;
+  border: 1px solid #EDE8E0;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.caja-historial-list { display: flex; flex-direction: column; gap: 8px; }
+
+.caja-historial-row {
+  padding: 12px 14px;
+  border: 1px solid #F0EBE3;
+  border-radius: 10px;
+  background: #faf8f5;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.caja-historial-fechas {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+}
+
+.caja-hist-fecha  { font-weight: 600; color: #1C1410; }
+.caja-hist-cierre { color: #8A7060; }
+
+.caja-historial-nums {
+  display: flex;
+  gap: 20px;
+  font-size: 12px;
+  color: #5B473A;
+  flex-wrap: wrap;
+}
+
+.caja-historial-nums span { font-weight: 500; }
+
+/* ── Responsive ── */
+@media (max-width: 800px) {
+  .caja-body { padding: 20px 16px 40px; }
+  .caja-resumen-grid { grid-template-columns: repeat(2, 1fr); }
+  .caja-factura-row { grid-template-columns: 1fr 1fr; gap: 4px; }
+  .caja-historial-nums { gap: 10px; }
+}
+
+@media (max-width: 480px) {
+  .caja-resumen-grid { grid-template-columns: 1fr 1fr; }
+  .caja-header { padding: 14px 16px; }
+}

@@ -12,6 +12,7 @@ import EditTables from "./componentes/EditTables"
 import Waiter from "./componentes/Waiter"
 import Login       from './componentes/login'
 import Reports from './componentes/Reports'
+import OpeningBox from "./componentes/OpeningBox"
 
 function App() {
   return (
@@ -39,6 +40,8 @@ function App() {
 
         {/* Reportes */}
         <Route path="/reports"    element={<Reports />} />
+
+        <Route path="/Opening"    element={<OpeningBox />} />
 
         {/* Menú y productos */}
         <Route path="/create-menu"  element={<CreateMenu />} />

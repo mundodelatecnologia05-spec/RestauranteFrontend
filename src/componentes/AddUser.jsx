@@ -7,33 +7,56 @@ const CARGOS = ["Mesero", "Chef", "Cajero", "Administrador", "Bartender"];
 
 export default function AddUser() {
   const [form, setForm] = useState({
-    nombre: "",
-    correo: "",
-    cargo: "",
-    usuario: "",
+    nombre:   "",
+    usuario:  "",
+    password: "",
+    cargo:    "",
   });
+  const [guardado, setGuardado] = useState(false);
+  const [error, setError]       = useState("");
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    setGuardado(false);
+    setError("");
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleAdd = () => {
-    console.log("Usuario añadido:", form);
+    if (!form.nombre || !form.usuario || !form.password || !form.cargo) {
+      setError("Todos los campos son obligatorios.");
+      return;
+    }
+
+    const usuarios = JSON.parse(localStorage.getItem("usuarios_sistema") || "[]");
+    const existe   = usuarios.find((u) => u.usuario === form.usuario.trim());
+    if (existe) {
+      setError("Ya existe un usuario con ese nombre de usuario.");
+      return;
+    }
+
+    const nuevo = {
+      id:       Date.now(),
+      nombre:   form.nombre.trim(),
+      usuario:  form.usuario.trim(),
+      password: form.password,
+      cargo:    form.cargo,
+      rol:      form.cargo === "Administrador" ? "Administrador" : form.cargo === "Mesero" ? "Mesero" : form.cargo,
+      activo:   true,
+    };
+
+    localStorage.setItem("usuarios_sistema", JSON.stringify([...usuarios, nuevo]));
+    setGuardado(true);
+    setTimeout(() => navigate("/users"), 1200);
   };
 
   return (
     <div className="au-layout">
 
-      {/* ── Sidebar ── */}
       <aside className="au-sidebar">
         <div className="au-sidebar-hero">
-          <img
-            src={prueba}
-            alt="Restaurant"
-            className="au-sidebar-hero-img"
-          />
+          <img src={prueba} alt="Restaurant" className="au-sidebar-hero-img" />
           <div className="au-sidebar-hero-overlay">
             <p className="au-brand">La Mesa Dorada</p>
             <p className="au-brand-sub">Panel de gestión</p>
@@ -47,9 +70,7 @@ export default function AddUser() {
               ? form.nombre.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()
               : "👤"}
           </div>
-          <p className="au-profile-name">
-            {form.nombre || "Nuevo miembro"}
-          </p>
+          <p className="au-profile-name">{form.nombre || "Nuevo miembro"}</p>
           <p className="au-profile-hint">
             {form.nombre
               ? "Revisá los datos antes de guardar"
@@ -62,6 +83,12 @@ export default function AddUser() {
             <span className="au-info-label">Nombre</span>
             <span className={`au-info-value ${!form.nombre ? "au-info-value--empty" : ""}`}>
               {form.nombre || "—"}
+            </span>
+          </div>
+          <div className="au-info-row">
+            <span className="au-info-label">Usuario</span>
+            <span className={`au-info-value ${!form.usuario ? "au-info-value--empty" : ""}`}>
+              {form.usuario || "—"}
             </span>
           </div>
           <div className="au-info-row">
@@ -83,7 +110,6 @@ export default function AddUser() {
         </div>
       </aside>
 
-      {/* ── Main ── */}
       <main className="au-main">
         <div className="au-topbar">
           <div>
@@ -96,7 +122,18 @@ export default function AddUser() {
         <div className="au-divider" />
 
         <div className="au-content">
-          <p className="au-section-label">Información personal</p>
+          {guardado && (
+            <div style={{ padding: "12px 16px", background: "rgba(58,175,106,0.1)", border: "1px solid rgba(58,175,106,0.3)", borderRadius: "8px", color: "#1A6B2E", fontWeight: 600, fontSize: "14px", marginBottom: "16px" }}>
+              ✅ Usuario creado correctamente. Redirigiendo...
+            </div>
+          )}
+          {error && (
+            <div style={{ padding: "12px 16px", background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.25)", borderRadius: "8px", color: "#A33333", fontWeight: 600, fontSize: "14px", marginBottom: "16px" }}>
+              ⚠️ {error}
+            </div>
+          )}
+
+          <p className="au-section-label">Información del usuario</p>
 
           <div className="au-fields">
             <div className="au-field">
@@ -105,32 +142,32 @@ export default function AddUser() {
                 className="au-input"
                 type="text"
                 name="nombre"
-                placeholder="Juanlito"
+                placeholder="Ej: Juan Montoya"
                 value={form.nombre}
                 onChange={handleChange}
               />
             </div>
 
             <div className="au-field">
-              <label className="au-label">Correo electrónico</label>
+              <label className="au-label">Usuario (para iniciar sesión)</label>
               <input
                 className="au-input"
-                type="email"
-                name="correo"
-                placeholder="juanlito@gmail.com"
-                value={form.correo}
+                type="text"
+                name="usuario"
+                placeholder="Ej: jmontoya"
+                value={form.usuario}
                 onChange={handleChange}
               />
             </div>
 
             <div className="au-field">
-              <label className="au-label">Usuario</label>
+              <label className="au-label">Contraseña</label>
               <input
                 className="au-input"
-                type="text"
-                name="usuario"
-                placeholder="tmontoya"
-                value={form.usuario}
+                type="password"
+                name="password"
+                placeholder="••••••••"
+                value={form.password}
                 onChange={handleChange}
               />
             </div>

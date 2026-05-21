@@ -11,10 +11,11 @@ function pct(val, max) {
 }
 
 const SECCIONES = [
-  { id: "resumen",    label: "Resumen",    icon: "📊" },
-  { id: "productos",  label: "Productos",  icon: "🍽️" },
-  { id: "stock",      label: "Stock",      icon: "📦" },
-  { id: "mesas",      label: "Mesas",      icon: "🪑" },
+  { id: "resumen",   label: "Resumen",   icon: "📊" },
+  { id: "productos", label: "Productos", icon: "🍽️" },
+  { id: "stock",     label: "Stock",     icon: "📦" },
+  { id: "mesas",     label: "Mesas",     icon: "🪑" },
+  { id: "meseros",   label: "Meseros",   icon: "👨‍🍳" },
 ];
 
 const PRODUCTOS_INICIALES = [
@@ -39,9 +40,13 @@ function cargarTodosLosPedidos() {
   return pedidos;
 }
 
+function cargarHistorialFacturas() {
+  return JSON.parse(localStorage.getItem("historial_facturas") || "[]");
+}
+
 function cargarTodosLosProductos() {
   const guardados = JSON.parse(localStorage.getItem("productos")) || [];
-  const ids = new Set(guardados.map((p) => p.id));
+  const ids       = new Set(guardados.map((p) => p.id));
   const iniciales = PRODUCTOS_INICIALES.filter((p) => !ids.has(p.id));
   return [...iniciales, ...guardados];
 }
@@ -50,14 +55,16 @@ export default function Reports() {
   const navigate = useNavigate();
   const [seccion, setSeccion] = useState("resumen");
 
-  const pedidos   = useMemo(() => cargarTodosLosPedidos(), []);
-  const productos = useMemo(() => cargarTodosLosProductos(), []);
+  const pedidos         = useMemo(() => cargarTodosLosPedidos(), []);
+  const historialFac    = useMemo(() => cargarHistorialFacturas(), []);
+  const productos       = useMemo(() => cargarTodosLosProductos(), []);
 
   const stats = useMemo(() => {
     const totalVentas    = pedidos.reduce((a, p) => a + p.total, 0);
     const totalPedidos   = pedidos.length;
     const ticketPromedio = totalPedidos > 0 ? Math.round(totalVentas / totalPedidos) : 0;
 
+    /* productos */
     const prodMap = {};
     pedidos.forEach((p) => {
       (p.items || []).forEach((i) => {
@@ -69,6 +76,7 @@ export default function Reports() {
     const productosMasVendidos = Object.values(prodMap).sort((a, b) => b.cantidad - a.cantidad);
     const maxProd = productosMasVendidos[0]?.cantidad || 1;
 
+    /* mesas */
     const mesaMap = {};
     pedidos.forEach((p) => {
       const key = p.mesaNumero || p.mesaId;
@@ -78,12 +86,38 @@ export default function Reports() {
     });
     const mesas = Object.values(mesaMap).sort((a, b) => b.total - a.total);
 
+    /* stock */
     const stockCritico = productos
       .filter((p) => p.stock != null && p.stock <= (p.stockMinimo || 5))
       .sort((a, b) => (a.stock / (a.stockMinimo || 5)) - (b.stock / (b.stockMinimo || 5)));
 
-    return { totalVentas, totalPedidos, ticketPromedio, productosMasVendidos, maxProd, mesas, stockCritico };
-  }, [pedidos, productos]);
+    /* meseros — combina pedidos activos + historial de facturas */
+    const meseroMap = {};
+
+    pedidos.forEach((p) => {
+      const key    = p.meseroUsuario || "desconocido";
+      const nombre = p.meseroNombre  || key;
+      if (!meseroMap[key]) meseroMap[key] = { usuario: key, nombre, pedidosActivos: 0, totalActivo: 0, facturado: 0, totalFacturado: 0 };
+      meseroMap[key].pedidosActivos += 1;
+      meseroMap[key].totalActivo    += p.total;
+    });
+
+    historialFac.forEach((f) => {
+      const key    = f.meseroUsuario || "desconocido";
+      const nombre = f.meseroNombre  || key;
+      if (!meseroMap[key]) meseroMap[key] = { usuario: key, nombre, pedidosActivos: 0, totalActivo: 0, facturado: 0, totalFacturado: 0 };
+      meseroMap[key].facturado      += 1;
+      meseroMap[key].totalFacturado += f.total;
+    });
+
+    const meseros = Object.values(meseroMap)
+      .map((m) => ({ ...m, totalGlobal: m.totalActivo + m.totalFacturado, pedidosGlobal: m.pedidosActivos + m.facturado }))
+      .sort((a, b) => b.totalGlobal - a.totalGlobal);
+
+    const maxMesero = meseros[0]?.totalGlobal || 1;
+
+    return { totalVentas, totalPedidos, ticketPromedio, productosMasVendidos, maxProd, mesas, stockCritico, meseros, maxMesero };
+  }, [pedidos, historialFac, productos]);
 
   return (
     <div className="rp-layout">
@@ -162,17 +196,17 @@ export default function Reports() {
                 </div>
               ) : (
                 <>
-                  <div className="rp-kpi-grid">
+                  <div className="rp-kpi-row">
                     <div className="rp-kpi rp-kpi--gold">
-                      <p className="rp-kpi-label">Ingresos totales</p>
+                      <p className="rp-kpi-label">💰 Ventas totales</p>
                       <p className="rp-kpi-value">{formatPrecio(stats.totalVentas)}</p>
                     </div>
                     <div className="rp-kpi rp-kpi--green">
-                      <p className="rp-kpi-label">Total pedidos</p>
+                      <p className="rp-kpi-label">🧾 Pedidos</p>
                       <p className="rp-kpi-value">{stats.totalPedidos}</p>
                     </div>
-                    <div className="rp-kpi rp-kpi--orange">
-                      <p className="rp-kpi-label">Ticket promedio</p>
+                    <div className="rp-kpi rp-kpi--blue">
+                      <p className="rp-kpi-label">🎯 Ticket promedio</p>
                       <p className="rp-kpi-value">{formatPrecio(stats.ticketPromedio)}</p>
                     </div>
                   </div>
@@ -198,6 +232,18 @@ export default function Reports() {
                           <div>
                             <p className="rp-top-name">Mesa {stats.mesas[0].mesa}</p>
                             <p className="rp-top-sub">{stats.mesas[0].pedidos} pedido{stats.mesas[0].pedidos !== 1 ? "s" : ""} · {formatPrecio(stats.mesas[0].total)}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {stats.meseros[0] && (
+                      <div className="rp-card">
+                        <p className="rp-card-title">👨‍🍳 Mesero estrella</p>
+                        <div className="rp-top-prod">
+                          <div className="rp-top-prod-icon">🏆</div>
+                          <div>
+                            <p className="rp-top-name">{stats.meseros[0].nombre}</p>
+                            <p className="rp-top-sub">{stats.meseros[0].pedidosGlobal} pedidos · {formatPrecio(stats.meseros[0].totalGlobal)}</p>
                           </div>
                         </div>
                       </div>
@@ -252,10 +298,7 @@ export default function Reports() {
               ) : (
                 <div className="rp-table-card">
                   <div className="rp-table-head rp-table-head--prod">
-                    <span>Producto</span>
-                    <span>Unidades</span>
-                    <span>Ingresos</span>
-                    <span>Demanda</span>
+                    <span>Producto</span><span>Unidades</span><span>Ingresos</span><span>Demanda</span>
                   </div>
                   {stats.productosMasVendidos.map((p, idx) => (
                     <div key={p.nombre} className="rp-table-row rp-table-row--prod">
@@ -287,7 +330,6 @@ export default function Reports() {
                   <span><strong>{stats.stockCritico.length}</strong> producto{stats.stockCritico.length !== 1 ? "s" : ""} por debajo del stock mínimo</span>
                 </div>
               )}
-
               <div className="rp-inv-grid">
                 {productos.map((item) => {
                   const stock    = item.stock ?? null;
@@ -296,7 +338,6 @@ export default function Reports() {
                   const ratio    = stock != null ? stock / minimo : 1;
                   const status   = stock == null ? "ok" : stock <= 0 ? "critico" : ratio < 1 ? "bajo" : "ok";
                   const barWidth = stock != null ? pct(stock, minimo * 1.5) : 100;
-
                   return (
                     <div key={item.id} className={`rp-inv-card rp-inv-card--${status}`}>
                       <div className="rp-inv-card-head">
@@ -309,9 +350,7 @@ export default function Reports() {
                       <div className="rp-inv-stocks">
                         <div className="rp-inv-stock-row">
                           <span className="rp-inv-stock-label">Stock actual</span>
-                          <span className={`rp-inv-stock-val rp-inv-stock-val--${status}`}>
-                            {stock != null ? `${stock} ${unidad}` : "Sin registro"}
-                          </span>
+                          <span className={`rp-inv-stock-val rp-inv-stock-val--${status}`}>{stock != null ? `${stock} ${unidad}` : "Sin registro"}</span>
                         </div>
                         <div className="rp-inv-stock-row">
                           <span className="rp-inv-stock-label">Mínimo requerido</span>
@@ -336,18 +375,11 @@ export default function Reports() {
           {seccion === "mesas" && (
             <div className="rp-section">
               {stats.mesas.length === 0 ? (
-                <div className="rp-empty">
-                  <p className="rp-empty-icon">🪑</p>
-                  <p>No hay actividad en mesas aún</p>
-                </div>
+                <div className="rp-empty"><p className="rp-empty-icon">🪑</p><p>No hay actividad en mesas aún</p></div>
               ) : (
                 <div className="rp-table-card">
                   <div className="rp-table-head rp-table-head--mesa">
-                    <span>Mesa</span>
-                    <span>Pedidos</span>
-                    <span>Ingresos</span>
-                    <span>Ticket prom.</span>
-                    <span>Actividad</span>
+                    <span>Mesa</span><span>Pedidos</span><span>Ingresos</span><span>Ticket prom.</span><span>Actividad</span>
                   </div>
                   {stats.mesas.map((m) => (
                     <div key={m.mesa} className="rp-table-row rp-table-row--mesa">
@@ -366,6 +398,69 @@ export default function Reports() {
                     </div>
                   ))}
                 </div>
+              )}
+            </div>
+          )}
+
+          {/* ═══════ MESEROS ═══════ */}
+          {seccion === "meseros" && (
+            <div className="rp-section">
+              {stats.meseros.length === 0 ? (
+                <div className="rp-empty">
+                  <p className="rp-empty-icon">👨‍🍳</p>
+                  <p>No hay datos de meseros aún</p>
+                  <p style={{ fontSize: "12px", color: "#B0A090", marginTop: "6px" }}>Los datos aparecen cuando los meseros inician sesión y toman pedidos</p>
+                </div>
+              ) : (
+                <>
+                  {/* Podio top 3 */}
+                  {stats.meseros.length >= 1 && (
+                    <div className="rp-podio">
+                      {stats.meseros.slice(0, 3).map((m, idx) => (
+                        <div key={m.usuario} className={`rp-podio-card rp-podio-card--${idx + 1}`}>
+                          <div className="rp-podio-medal">{idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉"}</div>
+                          <div className="rp-podio-avatar">{m.nombre.slice(0, 2).toUpperCase()}</div>
+                          <p className="rp-podio-nombre">{m.nombre}</p>
+                          <p className="rp-podio-usuario">@{m.usuario}</p>
+                          <p className="rp-podio-total">{formatPrecio(m.totalGlobal)}</p>
+                          <p className="rp-podio-pedidos">{m.pedidosGlobal} pedidos</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="rp-table-card" style={{ marginTop: "20px" }}>
+                    <div className="rp-table-head" style={{ display: "grid", gridTemplateColumns: "1.5fr 0.8fr 0.8fr 1fr 1fr 1fr", gap: "10px" }}>
+                      <span>Mesero</span>
+                      <span>Pedidos activos</span>
+                      <span>Facturado</span>
+                      <span>Ventas activas</span>
+                      <span>Total facturado</span>
+                      <span>Rendimiento</span>
+                    </div>
+                    {stats.meseros.map((m, idx) => (
+                      <div key={m.usuario} className="rp-table-row" style={{ display: "grid", gridTemplateColumns: "1.5fr 0.8fr 0.8fr 1fr 1fr 1fr", gap: "10px", alignItems: "center" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                          <div className={`rp-rank rp-rank--${idx < 3 ? idx + 1 : "rest"}`}>{idx + 1}</div>
+                          <div>
+                            <p style={{ fontWeight: 600, fontSize: "13px", color: "#1C1410" }}>{m.nombre}</p>
+                            <p style={{ fontSize: "11px", color: "#8A7060" }}>@{m.usuario}</p>
+                          </div>
+                        </div>
+                        <span className="rp-table-center" style={{ fontSize: "13px" }}>{m.pedidosActivos}</span>
+                        <span className="rp-table-center" style={{ fontSize: "13px" }}>{m.facturado}</span>
+                        <span className="rp-table-money" style={{ fontSize: "12px" }}>{formatPrecio(m.totalActivo)}</span>
+                        <span className="rp-table-money" style={{ fontSize: "12px" }}>{formatPrecio(m.totalFacturado)}</span>
+                        <div className="rp-bar-cell">
+                          <div className="rp-bar-wrap">
+                            <div className="rp-bar rp-bar--gold" style={{ width: `${pct(m.totalGlobal, stats.maxMesero)}%` }} />
+                          </div>
+                          <span className="rp-bar-pct">{pct(m.totalGlobal, stats.maxMesero)}%</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           )}
