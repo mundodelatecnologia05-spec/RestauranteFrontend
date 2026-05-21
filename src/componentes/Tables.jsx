@@ -4,14 +4,16 @@ import "../styles/Tables.css";
 import prueba from "../assets/prueba.jpg";
 
 const MESAS_INICIALES = [
-  { id: 1, numero: "01", estado: "disponible" },
-  { id: 2, numero: "02", estado: "disponible" },
-  { id: 3, numero: "03", estado: "disponible" },
-  { id: 4, numero: "04", estado: "disponible" },
-  { id: 5, numero: "05", estado: "disponible" },
-  { id: 6, numero: "06", estado: "disponible" },
-  { id: 7, numero: "07", estado: "disponible" },
-  { id: 8, numero: "08", estado: "inhabilitada" },
+  { id: 1,  numero: "01", estado: "disponible" },
+  { id: 2,  numero: "02", estado: "disponible" },
+  { id: 3,  numero: "03", estado: "disponible" },
+  { id: 4,  numero: "04", estado: "disponible" },
+  { id: 5,  numero: "05", estado: "disponible" },
+  { id: 6,  numero: "06", estado: "disponible" },
+  { id: 7,  numero: "07", estado: "disponible" },
+  { id: 8,  numero: "08", estado: "disponible" },
+  { id: 9,  numero: "09", estado: "disponible" },
+  { id: 10, numero: "10", estado: "disponible" },
 ];
 
 const ESTADO_CONFIG = {
@@ -494,7 +496,7 @@ export default function MesaList() {
     });
 
     const mesasExtra = mesasAdmin
-      .filter((m) => m.id > 8)
+      .filter((m) => m.id > 10)
       .map((m) => {
         const estado = m.estado.toLowerCase();
         const pedidoGuardado = localStorage.getItem(`pedido_mesa_${m.id}`);

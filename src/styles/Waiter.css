@@ -587,18 +587,27 @@ html, body, #root {
   border-color: #3aaf6a;
 }
 
-.mp-mesa-card--ocupada.mp-mesa-card--clickable:hover {
+.mp-mesa-card--ocupada.mp-mesa-card--clickable:hover,
+.mp-mesa-card--ocupada-propia.mp-mesa-card--clickable:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 28px rgba(249, 115, 22, 0.18);
   border-color: #f97316;
 }
 
+.mp-mesa-card--ocupada-otro.mp-mesa-card--clickable:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(59, 130, 246, 0.18);
+  border-color: #3b82f6;
+}
+
 .mp-mesa-card--inhabilitada { opacity: 0.35; cursor: not-allowed; }
 
 .mp-mesa-card-accent { height: 3px; }
-.mp-mesa-card-accent--libre        { background: #3aaf6a; }
-.mp-mesa-card-accent--ocupada      { background: #f97316; }
-.mp-mesa-card-accent--inhabilitada { background: #C8BFB5; }
+.mp-mesa-card-accent--libre         { background: #3aaf6a; }
+.mp-mesa-card-accent--ocupada       { background: #f97316; }
+.mp-mesa-card-accent--ocupada-propia { background: #f97316; }
+.mp-mesa-card-accent--ocupada-otro  { background: #3b82f6; }
+.mp-mesa-card-accent--inhabilitada  { background: #C8BFB5; }
 
 .mp-mesa-card-top {
   padding: 14px 14px 6px;
@@ -630,10 +639,17 @@ html, body, #root {
   border: 1px solid rgba(58, 175, 106, 0.25);
 }
 
-.mp-mesa-card-badge--ocupada {
+.mp-mesa-card-badge--ocupada,
+.mp-mesa-card-badge--ocupada-propia {
   background: rgba(249, 115, 22, 0.12);
   color: #c2560c;
   border: 1px solid rgba(249, 115, 22, 0.25);
+}
+
+.mp-mesa-card-badge--ocupada-otro {
+  background: rgba(59, 130, 246, 0.12);
+  color: #1d4ed8;
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .mp-mesa-card-badge--inhabilitada {
@@ -658,7 +674,9 @@ html, body, #root {
   text-transform: uppercase;
 }
 
-.mp-mesa-card-cta--busy { color: #f97316; }
+.mp-mesa-card-cta--busy   { color: #f97316; }
+.mp-mesa-card-cta--propia { color: #f97316; }
+.mp-mesa-card-cta--readonly { color: #3b82f6; }
 
 /* ════════════════════════════════════════
    GRID PRODUCTOS

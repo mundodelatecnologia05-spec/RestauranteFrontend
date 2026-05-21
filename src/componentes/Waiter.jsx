@@ -9,7 +9,7 @@ const MESAS_INICIALES = [
   { id: 4,  numero: "04", estado: "libre" },
   { id: 5,  numero: "05", estado: "libre" },
   { id: 6,  numero: "06", estado: "libre" },
-  { id: 7,  numero: "07", estado: "inhabilitada" },
+  { id: 7,  numero: "07", estado: "libre" },
   { id: 8,  numero: "08", estado: "libre" },
   { id: 9,  numero: "09", estado: "libre" },
   { id: 10, numero: "10", estado: "libre" },
@@ -66,18 +66,27 @@ export default function MeseroPanel() {
     const guardados = JSON.parse(localStorage.getItem("productos")) || [];
     setProductos([...PRODUCTOS_INICIALES, ...guardados]);
 
+    const normalizar = (e) => {
+      if (!e) return "libre";
+      const s = e.toLowerCase();
+      if (s === "disponible") return "libre";
+      if (s === "consumo")    return "ocupada";
+      if (s === "inhabilitada") return "inhabilitada";
+      return "libre";
+    };
+
     const mesasAdmin = JSON.parse(localStorage.getItem("mesas")) || [];
 
     const mesasBase = MESAS_INICIALES.map((m) => {
       const override       = mesasAdmin.find((a) => a.id === m.id);
-      const estadoBase     = override ? override.estado.toLowerCase() : m.estado;
+      const estadoBase     = normalizar(override ? override.estado : m.estado);
       const pedidoGuardado = localStorage.getItem(`pedido_mesa_${m.id}`);
       if (pedidoGuardado && estadoBase !== "inhabilitada") return { ...m, estado: "ocupada" };
       return { ...m, estado: estadoBase };
     });
 
     const mesasExtra = mesasAdmin.filter((m) => m.id > 10).map((m) => {
-      const estado         = m.estado.toLowerCase();
+      const estado         = normalizar(m.estado);
       const pedidoGuardado = localStorage.getItem(`pedido_mesa_${m.id}`);
       if (pedidoGuardado && estado !== "inhabilitada") return { ...m, estado: "ocupada" };
       return { ...m, estado };
@@ -470,7 +479,9 @@ export default function MeseroPanel() {
           </div>
         </div>
         <div className="mp-sidebar-hint">
-          <p>🟢 <strong>Libre</strong>: tomar pedido<br />🟠 <strong>Tu mesa</strong>: ver y editar<br />🔵 <strong>Otro mesero</strong>: solo ver</p>
+          <p>🟢 <strong>Libre</strong>: tomar pedido</p>
+          <p style={{ marginTop: "6px" }}>🟠 <strong>Mi mesa</strong>: ver y editar</p>
+          <p style={{ marginTop: "6px" }}>🔵 <strong>Otro mesero</strong>: solo ver</p>
         </div>
         <div className="mp-sidebar-footer">
           <button className="mp-back-btn" onClick={() => { localStorage.removeItem("usuario"); navigate("/login"); }}>← Cerrar Sesión</button>
@@ -499,19 +510,19 @@ export default function MeseroPanel() {
               const accentClass  = m.estado === "ocupada" ? (esPropiaMesa ? "ocupada-propia" : "ocupada-otro") : m.estado;
 
               return (
-                <div key={m.id} className={`mp-mesa-card mp-mesa-card--${m.estado}${m.estado !== "inhabilitada" ? " mp-mesa-card--clickable" : ""}`} onClick={() => seleccionarMesa(m)}>
+                <div key={m.id} className={`mp-mesa-card mp-mesa-card--${accentClass}${m.estado !== "inhabilitada" ? " mp-mesa-card--clickable" : ""}`} onClick={() => seleccionarMesa(m)}>
                   <div className={`mp-mesa-card-accent mp-mesa-card-accent--${accentClass}`} />
                   <div className="mp-mesa-card-top">
                     <div className="mp-mesa-card-num">{m.numero}</div>
-                    <span className={`mp-mesa-card-badge mp-mesa-card-badge--${m.estado}`}>
+                    <span className={`mp-mesa-card-badge mp-mesa-card-badge--${accentClass}`}>
                       {m.estado === "libre" ? "Libre" : m.estado === "ocupada" ? (esPropiaMesa ? "Mi mesa" : "Ocupada") : "Inhabilitada"}
                     </span>
                   </div>
                   <div className="mp-mesa-card-icon">
-                    {m.estado === "libre" ? "🪑" : m.estado === "ocupada" ? "🧾" : "🚫"}
+                    {m.estado === "libre" ? "🪑" : m.estado === "ocupada" ? (esPropiaMesa ? "🧾" : "👁️") : "🚫"}
                   </div>
                   {m.estado === "libre" && <div className="mp-mesa-card-cta">Tomar pedido →</div>}
-                  {m.estado === "ocupada" && esPropiaMesa && <div className="mp-mesa-card-cta">Ver / editar →</div>}
+                  {m.estado === "ocupada" && esPropiaMesa && <div className="mp-mesa-card-cta mp-mesa-card-cta--propia">Ver / editar →</div>}
                   {m.estado === "ocupada" && !esPropiaMesa && (
                     <div className="mp-mesa-card-cta mp-mesa-card-cta--readonly">{meseroNombre ? `${meseroNombre} · Ver` : "Ver consumo →"}</div>
                   )}

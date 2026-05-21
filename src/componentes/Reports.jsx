@@ -11,11 +11,11 @@ function pct(val, max) {
 }
 
 const SECCIONES = [
-  { id: "resumen",   label: "Resumen",   icon: "📊" },
-  { id: "productos", label: "Productos", icon: "🍽️" },
-  { id: "stock",     label: "Stock",     icon: "📦" },
-  { id: "mesas",     label: "Mesas",     icon: "🪑" },
-  { id: "meseros",   label: "Meseros",   icon: "👨‍🍳" },
+  { id: "resumen",   label: "Resumen",          icon: "📊" },
+  { id: "productos", label: "Productos",         icon: "🍽️" },
+  { id: "stock",     label: "Stock",             icon: "📦" },
+  { id: "mesas",     label: "Mesas",             icon: "🪑" },
+  { id: "meseros",   label: "Ranking Meseros",   icon: "🏆" },
 ];
 
 const PRODUCTOS_INICIALES = [
@@ -402,17 +402,35 @@ export default function Reports() {
             </div>
           )}
 
-          {/* ═══════ MESEROS ═══════ */}
+          {/* ═══════ MESEROS — RANKING VENTAS ═══════ */}
           {seccion === "meseros" && (
             <div className="rp-section">
               {stats.meseros.length === 0 ? (
                 <div className="rp-empty">
-                  <p className="rp-empty-icon">👨‍🍳</p>
-                  <p>No hay datos de meseros aún</p>
-                  <p style={{ fontSize: "12px", color: "#B0A090", marginTop: "6px" }}>Los datos aparecen cuando los meseros inician sesión y toman pedidos</p>
+                  <p className="rp-empty-icon">🏆</p>
+                  <p>No hay datos de ventas por mesero aún</p>
+                  <p style={{ fontSize: "12px", color: "#B0A090", marginTop: "6px" }}>Los datos aparecen cuando los meseros toman pedidos</p>
                 </div>
               ) : (
                 <>
+                  {/* Banner top seller */}
+                  {stats.meseros[0] && (
+                    <div className="rp-top-seller-banner">
+                      <div className="rp-top-seller-left">
+                        <span className="rp-top-seller-crown">👑</span>
+                        <div>
+                          <p className="rp-top-seller-label">Mesero que más vende</p>
+                          <p className="rp-top-seller-name">{stats.meseros[0].nombre}</p>
+                          <p className="rp-top-seller-user">@{stats.meseros[0].usuario}</p>
+                        </div>
+                      </div>
+                      <div className="rp-top-seller-right">
+                        <p className="rp-top-seller-amount">{formatPrecio(stats.meseros[0].totalGlobal)}</p>
+                        <p className="rp-top-seller-pedidos">{stats.meseros[0].pedidosGlobal} pedidos cerrados</p>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Podio top 3 */}
                   {stats.meseros.length >= 1 && (
                     <div className="rp-podio">
@@ -429,34 +447,63 @@ export default function Reports() {
                     </div>
                   )}
 
+                  {/* Tabla ranking completo */}
                   <div className="rp-table-card" style={{ marginTop: "20px" }}>
-                    <div className="rp-table-head" style={{ display: "grid", gridTemplateColumns: "1.5fr 0.8fr 0.8fr 1fr 1fr 1fr", gap: "10px" }}>
+                    <p className="rp-card-title" style={{ padding: "16px 20px 0" }}>📋 Ranking completo de ventas</p>
+                    <div className="rp-table-head rp-table-head--mesero">
+                      <span>Posición</span>
                       <span>Mesero</span>
-                      <span>Pedidos activos</span>
-                      <span>Facturado</span>
-                      <span>Ventas activas</span>
-                      <span>Total facturado</span>
+                      <span>Pedidos</span>
+                      <span>Total vendido</span>
+                      <span>Ticket prom.</span>
                       <span>Rendimiento</span>
                     </div>
-                    {stats.meseros.map((m, idx) => (
-                      <div key={m.usuario} className="rp-table-row" style={{ display: "grid", gridTemplateColumns: "1.5fr 0.8fr 0.8fr 1fr 1fr 1fr", gap: "10px", alignItems: "center" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    {stats.meseros.map((m, idx) => {
+                      const ticketProm = m.pedidosGlobal > 0 ? Math.round(m.totalGlobal / m.pedidosGlobal) : 0;
+                      return (
+                        <div key={m.usuario} className="rp-table-row rp-table-row--mesero">
                           <div className={`rp-rank rp-rank--${idx < 3 ? idx + 1 : "rest"}`}>{idx + 1}</div>
-                          <div>
-                            <p style={{ fontWeight: 600, fontSize: "13px", color: "#1C1410" }}>{m.nombre}</p>
-                            <p style={{ fontSize: "11px", color: "#8A7060" }}>@{m.usuario}</p>
+                          <div className="rp-mesero-cell">
+                            <div className="rp-mesero-avatar-sm">{m.nombre.slice(0, 2).toUpperCase()}</div>
+                            <div>
+                              <p className="rp-mesero-nombre">{m.nombre}</p>
+                              <p className="rp-mesero-usuario">@{m.usuario}</p>
+                            </div>
                           </div>
+                          <span className="rp-table-center">{m.pedidosGlobal}</span>
+                          <span className="rp-table-money rp-money--gold">{formatPrecio(m.totalGlobal)}</span>
+                          <span className="rp-table-money rp-muted">{formatPrecio(ticketProm)}</span>
+                          <div className="rp-bar-cell">
+                            <div className="rp-bar-wrap">
+                              <div className={`rp-bar rp-bar--${idx === 0 ? "gold" : "green"}`} style={{ width: `${pct(m.totalGlobal, stats.maxMesero)}%` }} />
+                            </div>
+                            <span className="rp-bar-pct">{pct(m.totalGlobal, stats.maxMesero)}%</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Detalle activos vs facturado */}
+                  <div className="rp-table-card" style={{ marginTop: "16px" }}>
+                    <p className="rp-card-title" style={{ padding: "16px 20px 0" }}>📊 Detalle por estado</p>
+                    <div className="rp-table-head" style={{ display: "grid", gridTemplateColumns: "1.8fr 0.9fr 0.9fr 1.1fr 1.1fr", gap: "10px" }}>
+                      <span>Mesero</span>
+                      <span>Pedidos activos</span>
+                      <span>Facturados</span>
+                      <span>Ventas activas</span>
+                      <span>Total facturado</span>
+                    </div>
+                    {stats.meseros.map((m) => (
+                      <div key={m.usuario} className="rp-table-row" style={{ display: "grid", gridTemplateColumns: "1.8fr 0.9fr 0.9fr 1.1fr 1.1fr", gap: "10px", alignItems: "center" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <div className="rp-mesero-avatar-sm">{m.nombre.slice(0, 2).toUpperCase()}</div>
+                          <span style={{ fontSize: "13px", fontWeight: 600, color: "#1C1410" }}>{m.nombre}</span>
                         </div>
                         <span className="rp-table-center" style={{ fontSize: "13px" }}>{m.pedidosActivos}</span>
                         <span className="rp-table-center" style={{ fontSize: "13px" }}>{m.facturado}</span>
                         <span className="rp-table-money" style={{ fontSize: "12px" }}>{formatPrecio(m.totalActivo)}</span>
                         <span className="rp-table-money" style={{ fontSize: "12px" }}>{formatPrecio(m.totalFacturado)}</span>
-                        <div className="rp-bar-cell">
-                          <div className="rp-bar-wrap">
-                            <div className="rp-bar rp-bar--gold" style={{ width: `${pct(m.totalGlobal, stats.maxMesero)}%` }} />
-                          </div>
-                          <span className="rp-bar-pct">{pct(m.totalGlobal, stats.maxMesero)}%</span>
-                        </div>
                       </div>
                     ))}
                   </div>

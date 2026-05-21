@@ -389,3 +389,223 @@ html, body, #root {
 
 @media (max-width: 1100px) { .rp-inv-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 540px)  { .rp-inv-grid { grid-template-columns: 1fr; } }
+/* ══════════════════════════════
+   RANKING MESEROS — NUEVOS ESTILOS
+   ══════════════════════════════ */
+
+.rp-top-seller-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #1C1410 0%, #2c1e14 100%);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 28px rgba(201, 168, 124, 0.2);
+}
+
+.rp-top-seller-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rp-top-seller-crown { font-size: 36px; }
+
+.rp-top-seller-label {
+  font-size: 11px;
+  color: #C9A87C;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.rp-top-seller-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.rp-top-seller-user {
+  font-size: 12px;
+  color: #8A7060;
+  margin-top: 2px;
+}
+
+.rp-top-seller-right { text-align: right; }
+
+.rp-top-seller-amount {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #C9A87C;
+}
+
+.rp-top-seller-pedidos {
+  font-size: 12px;
+  color: #8A7060;
+  margin-top: 4px;
+}
+
+/* Tabla ranking meseros */
+.rp-table-head--mesero {
+  display: grid;
+  grid-template-columns: 50px 1.8fr 0.7fr 1.1fr 1fr 1.2fr;
+  gap: 10px;
+}
+
+.rp-table-row--mesero {
+  display: grid;
+  grid-template-columns: 50px 1.8fr 0.7fr 1.1fr 1fr 1.2fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.rp-mesero-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rp-mesero-avatar-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C9A87C, #A07840);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rp-mesero-nombre {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1C1410;
+  line-height: 1.2;
+}
+
+.rp-mesero-usuario {
+  font-size: 11px;
+  color: #8A7060;
+}
+
+.rp-money--gold {
+  color: #A07840;
+  font-weight: 700;
+}
+/* ══════════════════════════════
+   PODIO MESEROS
+   ══════════════════════════════ */
+
+.rp-podio {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 4px;
+}
+
+.rp-podio-card {
+  background: #ffffff;
+  border: 1px solid #EDE8E0;
+  border-radius: 18px;
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.rp-podio-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+}
+
+/* Top 1 */
+.rp-podio-card--1 {
+  border-color: rgba(201,168,124,0.4);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(201,168,124,0.08) 0%,
+      #ffffff 100%
+    );
+}
+
+/* Top 2 */
+.rp-podio-card--2 {
+  border-color: rgba(170,170,170,0.35);
+}
+
+/* Top 3 */
+.rp-podio-card--3 {
+  border-color: rgba(205,127,50,0.35);
+}
+
+.rp-podio-medal {
+  font-size: 34px;
+  margin-bottom: 12px;
+}
+
+.rp-podio-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C9A87C, #8A5C2E);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 18px rgba(201,168,124,0.25);
+}
+
+.rp-podio-nombre {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1C1410;
+  line-height: 1.2;
+}
+
+.rp-podio-usuario {
+  font-size: 12px;
+  color: #8A7060;
+  margin-top: 4px;
+}
+
+.rp-podio-total {
+  margin-top: 16px;
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #A07840;
+}
+
+.rp-podio-pedidos {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #8A7060;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .rp-podio {
+    grid-template-columns: 1fr;
+  }
+}
